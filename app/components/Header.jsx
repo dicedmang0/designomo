@@ -9,14 +9,14 @@ export function Header({header, isLoggedIn, cart}) {
   const {shop, menu} = header;
   return (
     <header className="header">
-      <NavLink prefetch="intent" to="/" style={activeLinkStyle} end>
-        <strong>{shop.name}</strong>
-      </NavLink>
       <HeaderMenu
         menu={menu}
         viewport="desktop"
         primaryDomainUrl={header.shop.primaryDomain.url}
       />
+      <NavLink prefetch="intent" to="/" style={activeLinkStyle} end>
+        <img src={shop.brand.logo.image.url} />
+      </NavLink>
       <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} />
     </header>
   );
@@ -55,7 +55,6 @@ export function HeaderMenu({menu, primaryDomainUrl, viewport}) {
       )}
       {(menu || FALLBACK_HEADER_MENU).items.map((item) => {
         if (!item.url) return null;
-
         // if the url is internal, we strip the domain
         const url =
           item.url.includes('myshopify.com') ||
@@ -64,17 +63,37 @@ export function HeaderMenu({menu, primaryDomainUrl, viewport}) {
             ? new URL(item.url).pathname
             : item.url;
         return (
-          <NavLink
-            className="header-menu-item"
-            end
-            key={item.id}
-            onClick={closeAside}
-            prefetch="intent"
-            style={activeLinkStyle}
-            to={url}
-          >
-            {item.title}
-          </NavLink>
+          <div>
+            <NavLink
+              className="header-menu-item"
+              end
+              key={item.id}
+              onClick={closeAside}
+              prefetch="intent"
+              style={activeLinkStyle}
+              to={url}
+            >
+              {item.title}
+            </NavLink>
+              {item?.items.length > 0 && (
+                <div>
+                {(item?.items || FALLBACK_HEADER_MENU).map((submenu)=>{
+                  <NavLink    
+                  className="header-menu-item"
+                  end
+                  key={submenu.id}
+                  onClick={closeAside}
+                  prefetch="intent"
+                  style={activeLinkStyle}
+                  to={url}
+                >
+                  {submenu.title}
+                </NavLink>
+                console.log(submenu);
+                })}
+                </div>
+              )}
+          </div>
         );
       })}
     </nav>
