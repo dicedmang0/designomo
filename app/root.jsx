@@ -16,6 +16,11 @@ import favicon from '../public/favicon.svg';
 import resetStyles from './styles/reset.css';
 import appStyles from './styles/app.css';
 import {Layout} from '~/components/Layout';
+import carouselStyles from 'react-responsive-carousel/lib/styles/carousel.min.css'; // Import carousel CSS
+import SlickCarousel from 'slick-carousel/slick/slick.css';
+import SlickCarouselTheme from 'slick-carousel/slick/slick-theme.css';
+
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 /**
  * This is important to avoid re-fetching root queries on sub-navigations
@@ -39,6 +44,9 @@ export function links() {
   return [
     {rel: 'stylesheet', href: resetStyles},
     {rel: 'stylesheet', href: appStyles},
+    {rel: 'stylesheet', href: SlickCarousel},
+    {rel: 'stylesheet', href: SlickCarouselTheme},
+    {rel: 'stylesheet', href: carouselStyles},
     {
       rel: 'preconnect',
       href: 'https://cdn.shopify.com',
@@ -108,7 +116,6 @@ export default function App() {
   const nonce = useNonce();
   /** @type {LoaderReturnData} */
   const data = useLoaderData();
-
   return (
     <html lang="en">
       <head>

@@ -13,9 +13,19 @@
  *   id?: string;
  * }}
  */
-export function Aside({children, heading, id = 'aside'}) {
+export function Aside({children, heading, id = 'aside', }) {
+  const asideClassName = `aside-${id}`;
+  const asideStyle = {};
+  // if (id === 'search-aside') {
+  //   asideStyle.width = '100%';
+  //   asideStyle['backdrop-filter'] = 'blur(4px)';
+  //   asideStyle['background-color'] = 'rgba(255, 255, 255, 0.5)';
+  // } else if (id === 'cart-aside') {
+  //   asideStyle.maxWidth = '400px'; // Max width of 400px for cart-aside
+  //   asideStyle.width = '100%'; // Ensure it takes full width if content is less than 400px
+  // }
   return (
-    <div aria-modal className="overlay" id={id} role="dialog">
+    <div aria-modal className={`overlay ${asideClassName}`} id={id} role="dialog">
       <button
         className="close-outside"
         onClick={() => {
@@ -23,9 +33,9 @@ export function Aside({children, heading, id = 'aside'}) {
           window.location.hash = '';
         }}
       />
-      <aside>
+      <aside style={asideStyle}>
         <header>
-          <h3>{heading}</h3>
+          {/* <h3>{heading}</h3> */}
           <CloseAside />
         </header>
         <main>{children}</main>

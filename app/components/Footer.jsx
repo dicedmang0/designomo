@@ -1,13 +1,110 @@
-import {NavLink} from '@remix-run/react';
+import {Link, Links, NavLink} from '@remix-run/react';
 import {useRootLoaderData} from '~/root';
+import { useState,useEffect } from 'react';
 
 /**
  * @param {FooterQuery & {shop: HeaderQuery['shop']}}
  */
 export function Footer({menu, shop}) {
+  const [showButton, setShowButton] = useState(false);
+
+  const isBrowser = typeof window !== 'undefined';
+  const [windowWidth, setWindowWidth] = useState(isBrowser ? window.innerWidth : 0);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    // Cleanup the event listener when component unmounts
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth' // Smooth scrolling behavior
+    });
+  };
+
+  // Function to handle scrolling
+  const handleScroll = () => {
+    if (window.pageYOffset > 300) {
+      // Show the button when scrolled down 300 pixels
+      setShowButton(true);
+    } else {
+      // Hide the button when at the top
+      setShowButton(false);
+    }
+  };
+
+  // Attach scroll event listener
+  window.addEventListener('scroll', handleScroll);
   return (
     <footer className="footer">
-      <FooterMenu menu={menu} primaryDomainUrl={shop.primaryDomain.url} />
+      {isBrowser && windowWidth <= 768 ? (
+        <div className="Footer-Container">
+          
+        <div>
+            <button className="scroll-to-top" onClick={scrollToTop}>
+              Scroll to Top
+            </button>
+        </div>
+        <div className="Footer-Left">
+            <Link to="/pages/about-us">
+              <p> ABOUT US</p>
+            </Link>
+            <Link to="/pages/return-policy">
+              <p>RETURN POLICY</p>
+            </Link>
+            <Link to="/pages/contact-us">
+              <p>CONTACT US</p>
+            </Link>
+        </div>
+        <div className="Footer-Right-Content">
+          <div className="Footer-Middle">
+          </div>
+          <div className="Footer-Right">
+            <div className="Right-Content">
+              <span>© 2023 DESIGNBYOMO</span>
+            </div>
+          </div>
+        </div>
+        </div>
+      ):(
+        <div className="Footer-Container">
+        <div className="Footer-Left">
+            <Link to="/pages/about-us">
+              <p> ABOUT US</p>
+            </Link>
+            <Link to="/pages/return-policy">
+              <p>RETURN POLICY</p>
+            </Link>
+            <Link to="/pages/contact-us">
+              <p>CONTACT US</p>
+            </Link>
+        </div>
+        <div>
+            <button className="scroll-to-top" onClick={scrollToTop}>
+              Scroll to Top
+            </button>
+        </div>
+        <div className="Footer-Right-Content">
+          <div className="Footer-Middle">
+          </div>
+          <div className="Footer-Right">
+            <div className="Right-Content">
+              <span>© 2023 DESIGNBYOMO</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      )
+};
+      {/* <FooterMenu menu={menu} primaryDomainUrl={shop.primaryDomain.url} /> */}
     </footer>
   );
 }
@@ -94,6 +191,47 @@ const FALLBACK_FOOTER_MENU = {
     },
   ],
 };
+const FALLBACK_HEADER_MENU = {
+  id: 'gid://shopify/Menu/199655587896',
+  items: [
+    {
+      id: 'gid://shopify/MenuItem/461609500728',
+      resourceId: null,
+      tags: [],
+      title: 'Collections',
+      type: 'HTTP',
+      url: '/collections',
+      items: [],
+    },
+    {
+      id: 'gid://shopify/MenuItem/461609533496',
+      resourceId: null,
+      tags: [],
+      title: 'Blog',
+      type: 'HTTP',
+      url: '/blogs/journal',
+      items: [],
+    },
+    {
+      id: 'gid://shopify/MenuItem/461609566264',
+      resourceId: null,
+      tags: [],
+      title: 'Policies',
+      type: 'HTTP',
+      url: '/policies',
+      items: [],
+    },
+    {
+      id: 'gid://shopify/MenuItem/461609599032',
+      resourceId: 'gid://shopify/Page/92591030328',
+      tags: [],
+      title: 'About',
+      type: 'PAGE',
+      url: '/pages/about',
+      items: [],
+    },
+  ],
+};
 
 /**
  * @param {{
@@ -104,7 +242,7 @@ const FALLBACK_FOOTER_MENU = {
 function activeLinkStyle({isActive, isPending}) {
   return {
     fontWeight: isActive ? 'bold' : undefined,
-    color: isPending ? 'grey' : 'white',
+    color: isPending ? 'grey' : 'black',
   };
 }
 

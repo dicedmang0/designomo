@@ -1,4 +1,4 @@
-import {Suspense} from 'react';
+import {Suspense,useState} from 'react';
 import {defer, redirect} from '@shopify/remix-oxygen';
 import {Await, Link, useLoaderData} from '@remix-run/react';
 
@@ -10,7 +10,8 @@ import {
   CartForm,
 } from '@shopify/hydrogen';
 import {getVariantUrl} from '~/utils';
-
+import chart from '../Assets/chart.png';
+import chart2 from '../Assets/sizechart.png'
 /**
  * @type {MetaFunction<typeof loader>}
  */
@@ -24,7 +25,7 @@ export const meta = ({data}) => {
 export async function loader({params, request, context}) {
   const {handle} = params;
   const {storefront} = context;
-
+  const recommendedProducts = storefront.query(RECOMMENDED_PRODUCTS_QUERY);
   const selectedOptions = getSelectedProductOptions(request).filter(
     (option) =>
       // Filter out Shopify predictive search query params
@@ -76,7 +77,7 @@ export async function loader({params, request, context}) {
     variables: {handle},
   });
 
-  return defer({product, variants});
+  return defer({product, variants, recommendedProducts});
 }
 
 /**
@@ -102,10 +103,16 @@ function redirectToFirstVariant({product, request}) {
   );
 }
 
+/**
+ * @param {{
+*   products: Promise<RecommendedProductsQuery>;
+* }}
+*/
 export default function Product() {
   /** @type {LoaderReturnData} */
-  const {product, variants} = useLoaderData();
+  const {product, variants, data} = useLoaderData();
   const {selectedVariant} = product;
+  const recommendedProducts = data?.recommendedProducts || [];
   return (
     <div className="product">
       <ProductImage image={selectedVariant?.image} />
@@ -114,12 +121,14 @@ export default function Product() {
         product={product}
         variants={variants}
       />
+    {/* <RecommendedProducts products={recommendedProducts} /> */}
     </div>
   );
 }
 
 /**
  * @param {{image: ProductVariantFragment['image']}}
+ * 
  */
 function ProductImage({image}) {
   if (!image) {
@@ -127,61 +136,100 @@ function ProductImage({image}) {
   }
   return (
     <div className="product-image">
-      <Image
+          <Image
         alt={image.altText || 'Product Image'}
-        aspectRatio="1/1"
         data={image}
         key={image.id}
-        sizes="(min-width: 45em) 50vw, 100vw"
-      />
+        sizes="(min-width: 45em) 50vw, 100vw"/>
+      
     </div>
   );
 }
+
 
 /**
  * @param {{
  *   product: ProductFragment;
  *   selectedVariant: ProductFragment['selectedVariant'];
  *   variants: Promise<ProductVariantsQuery>;
+*    products: Promise<RecommendedProductsQuery>;
+ * 
  * }}
  */
 function ProductMain({selectedVariant, product, variants}) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [sizeOpen, setSizeOpen] = useState(false);
+  const data = useLoaderData();
+  const toggleAccordion = () => {
+    setIsOpen(!isOpen);
+  };
+  const SizeToogle = () => {
+    setSizeOpen(!sizeOpen);
+  };
   const {title, descriptionHtml} = product;
   return (
     <div className="product-main">
-      <h1>{title}</h1>
+      <h1 style={{textTransform:'uppercase', margin:'0px'}}>{title}</h1>
       <ProductPrice selectedVariant={selectedVariant} />
       <br />
-      <Suspense
-        fallback={
-          <ProductForm
-            product={product}
-            selectedVariant={selectedVariant}
-            variants={[]}
-          />
-        }
+      <br />
+      <VariantSelector
+        handle={product.handle}
+        options={product.options}
+        variants={variants}
       >
-        <Await
-          errorElement="There was a problem loading product variants"
-          resolve={variants}
+        {({option}) => <ProductOptions key={option.name} option={option} />}
+      </VariantSelector>
+      <div>
+          
+            <strong>Description</strong>
+          
+          
+          <div dangerouslySetInnerHTML={{__html: descriptionHtml}} />
+      
+        
+      </div>
+      <br />
+      <div className={`accordion ${sizeOpen ? 'open' : ''}`}>
+      <button className="accordion-btn" onClick={SizeToogle}>
+            <strong>
+            SIZE GUIDE &gt;
+            </strong>
+          </button>
+          {sizeOpen && (
+        <div className="accordion-content">
+          <img src={chart} />
+          <img src={chart2} />
+        </div>
+      )}
+      </div>
+      <br />
+      <br />
+      <div className="Button-container" style={{display: 'flex'}}>
+        <AddToCartButton
+          disabled={!selectedVariant || !selectedVariant.availableForSale}
+          onClick={() => {
+            window.location.href = window.location.href + '#cart-aside';
+          }}
+          lines={
+            selectedVariant
+              ? [
+                  {
+                    merchandiseId: selectedVariant.id,
+                    quantity: 1,
+                  },
+                ]
+              : []
+          }
         >
-          {(data) => (
-            <ProductForm
-              product={product}
-              selectedVariant={selectedVariant}
-              variants={data.product?.variants.nodes || []}
-            />
-          )}
-        </Await>
-      </Suspense>
-      <br />
-      <br />
-      <p>
-        <strong>Description</strong>
-      </p>
-      <br />
-      <div dangerouslySetInnerHTML={{__html: descriptionHtml}} />
-      <br />
+          {selectedVariant?.availableForSale ? 'Add to cart' : 'Sold out'}
+        </AddToCartButton>
+        <button className='checkout-btn'>
+          <a href="#cart-aside">CHECKOUT</a>
+        </button>
+      </div>
+      
+    <RecommendedProducts products={data.recommendedProducts} />
     </div>
   );
 }
@@ -253,14 +301,18 @@ function ProductForm({product, selectedVariant, variants}) {
 }
 
 /**
- * @param {{option: VariantOption}}
+ * @param {{
+ * option: VariantOption;
+ * image: ProductVariantFragment['image'];
+ * 
+ * }}
  */
 function ProductOptions({option}) {
   return (
     <div className="product-options" key={option.name}>
       <h5>{option.name}</h5>
       <div className="product-options-grid">
-        {option.values.map(({value, isAvailable, isActive, to}) => {
+        {option.values.map(({value, isAvailable, isActive, to, url}) => {
           return (
             <Link
               className="product-options-item"
@@ -305,6 +357,7 @@ function AddToCartButton({analytics, children, disabled, lines, onClick}) {
           />
           <button
             type="submit"
+            className='AddtoCart'
             onClick={onClick}
             disabled={disabled ?? fetcher.state !== 'idle'}
           >
@@ -314,6 +367,47 @@ function AddToCartButton({analytics, children, disabled, lines, onClick}) {
       )}
     </CartForm>
   );
+}
+/**
+ * @param {{
+*   products: Promise<RecommendedProductsQuery>;
+* }}
+*/
+function RecommendedProducts({products}) {
+  // if (!products || !products.nodes || !Array.isArray(products.nodes)) {
+  //   return <div>No recommended products available</div>; // Return null or any fallback content if products or nodes are undefined
+  // }
+ return (
+   <div className="recommended-products">
+     <h2>Recommended Products</h2>
+     <Suspense fallback={<div>Loading...</div>}>
+       <Await resolve={products}>
+         {({products}) => (
+           <div className="recommended-products-grid">
+             {products.nodes.map((product) => (
+               <Link
+                 key={product.id}
+                 className="recommended-product"
+                 to={`/products/${product.handle}`}
+               >
+                 <Image
+                   data={product.images.nodes[0]}
+                   aspectRatio="1/1"
+                   sizes="(min-width: 45em) 20vw, 50vw"
+                 />
+                 <h4>{product.title}</h4>
+                 <small>
+                   <Money data={product.priceRange.minVariantPrice} />
+                 </small>
+               </Link>
+             ))}
+           </div>
+         )}
+       </Await>
+     </Suspense>
+     <br />
+   </div>
+ );
 }
 
 const PRODUCT_VARIANT_FRAGMENT = `#graphql
@@ -325,7 +419,6 @@ const PRODUCT_VARIANT_FRAGMENT = `#graphql
     }
     id
     image {
-      __typename
       id
       url
       altText
@@ -361,6 +454,17 @@ const PRODUCT_FRAGMENT = `#graphql
     handle
     descriptionHtml
     description
+    images(first: 5) {
+      edges {
+        node {
+          id
+          originalSrc
+          altText
+          width
+          height
+        }
+      }
+    }
     options {
       name
       values
@@ -418,6 +522,36 @@ const VARIANTS_QUERY = `#graphql
     }
   }
 `;
+const RECOMMENDED_PRODUCTS_QUERY = `#graphql
+  fragment RecommendedProduct on Product {
+    id
+    title
+    handle
+    priceRange {
+      minVariantPrice {
+        amount
+        currencyCode
+      }
+    }
+    images(first: 1) {
+      nodes {
+        id
+        url
+        altText
+        width
+        height
+      }
+    }
+  }
+  query RecommendedProducts ($country: CountryCode, $language: LanguageCode)
+    @inContext(country: $country, language: $language) {
+    products(first: 4, sortKey: UPDATED_AT, reverse: true) {
+      nodes {
+        ...RecommendedProduct
+      }
+    }
+  }
+`;
 
 /** @typedef {import('@shopify/remix-oxygen').LoaderFunctionArgs} LoaderFunctionArgs */
 /** @template T @typedef {import('@remix-run/react').MetaFunction<T>} MetaFunction */
@@ -425,6 +559,7 @@ const VARIANTS_QUERY = `#graphql
 /** @typedef {import('storefrontapi.generated').ProductFragment} ProductFragment */
 /** @typedef {import('storefrontapi.generated').ProductVariantsQuery} ProductVariantsQuery */
 /** @typedef {import('storefrontapi.generated').ProductVariantFragment} ProductVariantFragment */
+/** @typedef {import('storefrontapi.generated').RecommendedProductsQuery} RecommendedProductsQuery */
 /** @typedef {import('@shopify/hydrogen').VariantOption} VariantOption */
 /** @typedef {import('@shopify/hydrogen/storefront-api-types').CartLineInput} CartLineInput */
 /** @typedef {import('@shopify/hydrogen/storefront-api-types').SelectedOption} SelectedOption */

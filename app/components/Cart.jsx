@@ -84,6 +84,7 @@ function CartLineItem({layout, line}) {
       )}
 
       <div>
+        <div style={{display:'flex', fontSize:'11px', justifyContent:'space-between',alignItems:'center'}}>
         <Link
           prefetch="intent"
           to={lineItemUrl}
@@ -94,11 +95,13 @@ function CartLineItem({layout, line}) {
             }
           }}
         >
-          <p>
+          <p style={{fontSize:'12px', textTransform:'uppercase'}}>
             <strong>{product.title}</strong>
           </p>
         </Link>
         <CartLinePrice line={line} as="span" />
+        </div>
+
         <ul>
           {selectedOptions.map((option) => (
             <li key={option.name}>
@@ -121,9 +124,11 @@ function CartCheckoutActions({checkoutUrl}) {
   if (!checkoutUrl) return null;
 
   return (
-    <div>
+    <div style={{display:'flex', justifyContent:'center'}}>
       <a href={checkoutUrl} target="_self">
-        <p>Continue to Checkout &rarr;</p>
+        <button style={{width:'321.001px', height:'40px', background:'black',color:'white'}}>
+          CHECKOUT
+        </button>
       </a>
       <br />
     </div>
@@ -143,16 +148,15 @@ export function CartSummary({cost, layout, children = null}) {
 
   return (
     <div aria-labelledby="cart-summary" className={className}>
-      <h4>Totals</h4>
       <dl className="cart-subtotal">
-        <dt>Subtotal</dt>
-        <dd>
+        <strong>TOTAL</strong>
+        <strong>
           {cost?.subtotalAmount?.amount ? (
             <Money data={cost?.subtotalAmount} />
           ) : (
             '-'
           )}
-        </dd>
+        </strong>
       </dl>
       {children}
     </div>
@@ -185,7 +189,7 @@ function CartLineQuantity({line}) {
 
   return (
     <div className="cart-line-quantiy">
-      <small>Quantity: {quantity} &nbsp;&nbsp;</small>
+      <small>Quantity:</small>
       <CartLineUpdateButton lines={[{id: lineId, quantity: prevQuantity}]}>
         <button
           aria-label="Decrease quantity"
@@ -197,6 +201,7 @@ function CartLineQuantity({line}) {
         </button>
       </CartLineUpdateButton>
       &nbsp;
+      <small> {quantity} &nbsp;&nbsp;</small>
       <CartLineUpdateButton lines={[{id: lineId, quantity: nextQuantity}]}>
         <button
           aria-label="Increase quantity"
@@ -296,8 +301,8 @@ function CartDiscounts({discountCodes}) {
 
       {/* Show an input to apply a discount */}
       <UpdateDiscountForm discountCodes={codes}>
-        <div>
-          <input type="text" name="discountCode" placeholder="Discount code" />
+        <div style={{display:'flex', justifyContent:'center'}}>
+          <input style={{borderRadius:'0px'}} type="text" name="discountCode" placeholder="Discount code" />
           &nbsp;
           <button type="submit">Apply</button>
         </div>

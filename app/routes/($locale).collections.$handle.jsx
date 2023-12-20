@@ -47,7 +47,6 @@ export default function Collection() {
 
   return (
     <div className="collection">
-      <h1>{collection.title}</h1>
       <p className="collection-description">{collection.description}</p>
       <Pagination connection={collection.products}>
         {({nodes, isLoading, PreviousLink, NextLink}) => (
@@ -111,8 +110,8 @@ function ProductItem({product, loading}) {
           sizes="(min-width: 45em) 400px, 100vw"
         />
       )}
-      <h4>{product.title}</h4>
-      <small>
+      <h4 style={{textAlign: 'center', fontFamily:'Arial'}}>{product.title}</h4>
+      <small style={{textAlign:'center', fontFamily:'Arial', fontStyle:'italic'}}>
         <Money data={product.priceRange.minVariantPrice} />
       </small>
     </Link>

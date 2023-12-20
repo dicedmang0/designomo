@@ -17,11 +17,18 @@
     "@shopify/cli-hydrogen": "^6.0.0",
     "@shopify/hydrogen": "^2023.10.0",
     "@shopify/remix-oxygen": "^2.0.0",
+    "axios": "^1.6.2",
+    "framer-motion": "^10.16.4",
     "graphql": "^16.6.0",
     "graphql-tag": "^2.12.6",
+    "gsap": "^3.12.2",
     "isbot": "^3.6.6",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-responsive-carousel": "^3.2.23",
+    "react-slick": "^0.29.0",
+    "react-social-media-embed": "^2.3.6",
+    "slick-carousel": "^1.8.1"
   },
   "devDependencies": {
     "@remix-run/dev": "2.1.0",

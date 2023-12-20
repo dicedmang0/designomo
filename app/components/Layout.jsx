@@ -9,12 +9,15 @@ import {
   PredictiveSearchResults,
 } from '~/components/Search';
 
+
 /**
  * @param {LayoutProps}
  */
 export function Layout({cart, children = null, footer, header, isLoggedIn}) {
+  
   return (
     <>
+    
       <CartAside cart={cart} />
       <SearchAside />
       <MobileMenuAside menu={header.menu} shop={header.shop} />
@@ -48,7 +51,7 @@ function CartAside({cart}) {
 
 function SearchAside() {
   return (
-    <Aside id="search-aside" heading="SEARCH">
+    <Aside id="search-aside">
       <div className="predictive-search">
         <br />
         <PredictiveSearchForm>
