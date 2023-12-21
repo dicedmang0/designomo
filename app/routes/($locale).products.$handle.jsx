@@ -113,10 +113,10 @@ export default function Product() {
   }
   const { product, variants } = data;
   console.log(data)
-  const {selectedVariant} = product;
+  const {selectedVariant, images} = product;
   return (
     <div className="product">
-      <ProductImage image={selectedVariant?.image} />
+      <ProductImage images={images.edges.map(edge => edge.node)} />
       <ProductMain
         selectedVariant={selectedVariant}
         product={product}
@@ -128,21 +128,35 @@ export default function Product() {
 }
 
 /**
- * @param {{image: ProductVariantFragment['image']}}
+ * @param {{images: ProductVariantFragment['image']}}
  * 
  */
-function ProductImage({image}) {
-  if (!image) {
+function ProductImage({images}) {
+  console.log(images);
+  const [selectedImage, setSelectedImage] = useState(images[0]);
+  if (!images) {
     return <div className="product-image" />;
   }
   return (
-    <div className="product-image">
-          <Image
-        alt={image.altText || 'Product Image'}
-        data={image}
-        key={image.id}
-        sizes="(min-width: 45em) 50vw, 100vw"/>
-      
+    <div className="product-image-gallery">
+      <div className="selected-image">
+        <Image
+          alt={selectedImage.altText || 'Product Image'}
+          data={{ url: selectedImage.originalSrc }} // Use originalSrc as url
+          sizes="(min-width: 45em) 50vw, 100vw"
+        />
+      </div>
+      <div className="image-thumbnails">
+        {images.map((image, index) => (
+          <button key={image.id} onClick={() => setSelectedImage(images[index])}>
+            <Image
+              alt={image.altText || 'Thumbnail'}
+              data={{ url: image.originalSrc }} // Use originalSrc as url
+              sizes="100px"
+            />
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
@@ -188,7 +202,7 @@ function ProductMain({selectedVariant, product, variants}) {
       </div>
       <br />
       
-      <div class="Clean_Size_Chart"></div>
+      <div className="Clean_Size_Chart"></div>
       <br />
       <br />
       <div className="Button-container" style={{display: 'flex'}}>

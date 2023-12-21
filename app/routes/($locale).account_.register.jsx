@@ -155,7 +155,7 @@ export default function Register() {
         ) : (
           <br />
         )}
-        <button style={{minWidth:'269px', borderRadius:'0px', background:'black', color:'white', height:'40px'}} type="submit">Register</button>
+        <button style={{minWidth:'269px', borderRadius:'0px', background:'black', color:'white', height:'40px'}} type="submit">REGISTER</button>
       </Form>
       </div>
       <br />

@@ -647,7 +647,7 @@ input[type=search]{
     scale: 1;
   }
   100%{
-    transform: translate(30px, -720px);
+    transform: translate(7px, -780px);
     scale: 0.4;
   }
 }

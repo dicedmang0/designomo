@@ -12,14 +12,14 @@ import {
   ScrollRestoration,
   isRouteErrorResponse,
 } from '@remix-run/react';
-import favicon from '../public/favicon.svg';
+import favicon from '../public/favicon.png';
 import resetStyles from './styles/reset.css';
 import appStyles from './styles/app.css';
 import {Layout} from '~/components/Layout';
 import carouselStyles from 'react-responsive-carousel/lib/styles/carousel.min.css'; // Import carousel CSS
 import SlickCarousel from 'slick-carousel/slick/slick.css';
 import SlickCarouselTheme from 'slick-carousel/slick/slick-theme.css';
-
+import { useEffect } from 'react';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 /**
@@ -111,6 +111,19 @@ export async function loader({context}) {
     {headers},
   );
 }
+const seoConfig = {
+  title: 'Design by OMO',
+  titleTemplate: '%s - Design by OMO',
+  description: 'Our commitment extends to comfort and sustainability. From fabric selection to the final stitch, every OMO pieces are designed and produced in Indonesia.',
+};
+function SEOHead({ seo }) {
+  return (
+    <>
+      <title>{seo.titleTemplate.replace('%s', seo.title)}</title>
+      <meta name="description" content={seo.description} />
+    </>
+  );
+}
 
 export default function App() {
   const nonce = useNonce();
@@ -121,6 +134,9 @@ export default function App() {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <title>Design by Omo</title>
+        <meta name="description" content="Our commitment extends to comfort and sustainability. From fabric selection to the final stitch, every OMO pieces are designed and produced in Indonesia." />
+        <SEOHead seo={seoConfig} />
         <Meta />
         <Links />
       </head>
