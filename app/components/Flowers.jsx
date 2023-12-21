@@ -30,7 +30,7 @@ function Flowers() {
     infinite: true,
     speed: 500,
     slidesToShow: 3,
-    slidesToScroll: 3,
+    slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 3000,
     arrows: false, // Show navigation arrows
@@ -112,7 +112,7 @@ function Flowers() {
         </Slider>
         </div>
         <div className='Lookbook-Title'>
-            <h1>2023SUMMERCAPSULE</h1>
+            <h1>2023SUMMER CAPSULE</h1>
         </div>
     </div>
   )

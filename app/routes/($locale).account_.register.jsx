@@ -1,6 +1,6 @@
 import {json, redirect} from '@shopify/remix-oxygen';
 import {Form, Link, useActionData} from '@remix-run/react';
-
+import { useNavigate } from 'react-router-dom';
 /**
  * @param {LoaderFunctionArgs}
  */
@@ -100,11 +100,17 @@ export default function Register() {
   /** @type {ActionReturnData} */
   const data = useActionData();
   const error = data?.error || null;
+  const navigate = useNavigate();
+
+  const handleBackClick = () => {
+    navigate(-1);
+  };
   return (
     <div className="login">
-      <h1>SIGN UP</h1>
-      
-      <span style={{letterSpacing:'-0.78px',fontSize:'14px', marginBottom:'20px'}}>ALREADY HAVE AN ACCOUNT? <Link style={{textDecorationLine:'underline'}} to="/account/login">LOG IN</Link> </span>
+      <div className="login-container">
+      <h1 style={{alignSelf:'flex-start'}}>SIGN UP</h1>
+      <button className="back-button" onClick={handleBackClick}>X</button>
+      <span style={{letterSpacing:'-0.78px',fontSize:'14px', marginBottom:'20px',alignSelf:'flex-start'}}>ALREADY HAVE AN ACCOUNT? <Link style={{textDecorationLine:'underline'}} to="/account/login">LOG IN</Link> </span>
       <Form style={{display:'flex',flexDirection:'column'}} method="POST">
           <input
           style={{minWidth:'250px', height:'20px', borderRadius:'0px'}}
@@ -151,6 +157,7 @@ export default function Register() {
         )}
         <button style={{minWidth:'269px', borderRadius:'0px', background:'black', color:'white', height:'40px'}} type="submit">Register</button>
       </Form>
+      </div>
       <br />
     </div>
   );

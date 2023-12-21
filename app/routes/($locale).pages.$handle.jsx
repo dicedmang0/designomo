@@ -127,23 +127,45 @@ export default function Page() {
           {isBrowser && windowWidth <= 768? (
             
           <div className="draggable-container">
-          <DraggableElement startPosition={{x: 20, y: 59}}>
-            <div className="draggable-item">
-              <img src={LBM1} />
-            </div>
-          </DraggableElement>
-
-          <DraggableElement startPosition={{x: 46, y: 180}}>
-            <div className="draggable-item">
-              <img src={LBM2} />
-            </div>
-          </DraggableElement>
-
-          <DraggableElement startPosition={{x: 50, y: 304}}>
-            <div className="draggable-item">
-              <img src={LBM3} />
-            </div>
-          </DraggableElement>
+          <Link to="/pages/technicolor-dreams">
+              <DraggableElement startPosition={{x: 150, y: 326}}>
+                <div className="draggable-item">
+                  <img src={LB1} />
+                </div>
+              </DraggableElement>
+              </Link>
+              <Link to='/pages/fleeting-threads'>
+              <DraggableElement startPosition={{x: -50, y: 50}}>
+                <div className="draggable-item">
+                  <img src={LB2} />
+                </div>
+              </DraggableElement></Link>
+  
+              <Link to='/pages/flowers-dont-dance'>
+              <DraggableElement startPosition={{x: -100, y: 220}}>
+                <div className="draggable-item">
+                  <img src={LB3} />
+                </div>
+              </DraggableElement></Link>
+              <Link to='/pages/look-cool-2023'>
+              <DraggableElement startPosition={{x: -200, y: 400}}>
+                <div className="draggable-item">
+                  <img src={LB4} />
+                </div>
+              </DraggableElement></Link>
+              <Link to='/pages/its-an-omos-world'>
+              <DraggableElement startPosition={{x: -100, y: 500}}>
+                <div className="draggable-item">
+                  <img src={LB5} />
+                </div>
+              </DraggableElement></Link>
+              <Link to='/pages/omo-x-agittaria'>
+              <DraggableElement startPosition={{x: -200, y: 200}}>
+                <div className="draggable-item">
+                  <img src={LB6} />
+                </div>
+              </DraggableElement>
+              </Link>
           {/* Add more DraggableElement components for additional draggable elements */}
         </div>
           ): (

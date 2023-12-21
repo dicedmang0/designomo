@@ -1,6 +1,6 @@
 import {json, redirect} from '@shopify/remix-oxygen';
 import {Form, Link, useActionData} from '@remix-run/react';
-
+import { useNavigate } from 'react-router-dom';
 /**
  * @type {MetaFunction}
  */
@@ -71,11 +71,17 @@ export default function Login() {
   /** @type {ActionReturnData} */
   const data = useActionData();
   const error = data?.error || null;
+  const navigate = useNavigate();
+
+  const handleBackClick = () => {
+    navigate(-1);
+  };
 
   return (
     <div className="login">
-      <div className="login-container"><h2 style={{marginBottom:'30px'}}>LOG IN</h2>
-      <span style={{letterSpacing:'-0.78px',fontSize:'14px', marginBottom:'20px'}}>DONT HAVE AN ACCOUNT? <Link style={{textDecorationLine:'underline'}} to="/account/register">SIGN UP</Link> </span>
+      <button className="back-button" onClick={handleBackClick}>X</button>
+      <div className="login-container"><h2 style={{marginBottom:'30px',alignSelf:'flex-start'}}>LOG IN</h2>
+      <span style={{letterSpacing:'-0.78px',fontSize:'14px', marginBottom:'20px',alignSelf:'flex-start'}}>DONT HAVE AN ACCOUNT? <Link style={{textDecorationLine:'underline'}} to="/account/register">SIGN UP</Link> </span>
       <Form style={{marginTop:'10px'}} method="POST">
           <input
           style={{minWidth:'250px', height:'20px', borderRadius:'0px'}}

@@ -183,28 +183,12 @@ function ProductMain({selectedVariant, product, variants}) {
         {({option}) => <ProductOptions key={option.name} option={option} />}
       </VariantSelector>
       <div>
-          
             <strong>Description</strong>
-          
-          
           <div dangerouslySetInnerHTML={{__html: descriptionHtml}} />
-      
-        
       </div>
       <br />
-      <div className={`accordion ${sizeOpen ? 'open' : ''}`}>
-      <button className="accordion-btn" onClick={SizeToogle}>
-            <strong>
-            SIZE GUIDE &gt;
-            </strong>
-          </button>
-          {sizeOpen && (
-        <div className="accordion-content">
-          <img src={chart} />
-          <img src={chart2} />
-        </div>
-      )}
-      </div>
+      
+      <div class="Clean_Size_Chart"></div>
       <br />
       <br />
       <div className="Button-container" style={{display: 'flex'}}>

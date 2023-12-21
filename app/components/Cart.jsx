@@ -84,8 +84,8 @@ function CartLineItem({layout, line}) {
         />
       )}
 
-      <div style={{display:'flex', flexDirection:'column', width:'100%', fontFamily:'Arial',paddingRight:'5px'}}> 
-        <div style={{display:'flex', fontSize:'11px', justifyContent:'space-between',alignItems:'flex-start'}}>
+      <div style={{display:'flex', flexDirection:'column', width:'100%', fontFamily:'Arial',paddingRight:'5px',justifyContent:'space-between'}}> 
+        <div style={{display:'flex', fontSize:'13px', justifyContent:'space-between',alignItems:'flex-start'}}>
         <Link
           prefetch="intent"
           to={lineItemUrl}
@@ -96,16 +96,16 @@ function CartLineItem({layout, line}) {
             }
           }}
         >
-          <p style={{fontSize:'12px', textTransform:'uppercase', maxWidth:'120px'}}>
+          <p style={{fontSize:'13px', textTransform:'uppercase', maxWidth:'120px'}}>
             <strong>{product.title}</strong>
           </p>
         </Link>
         <CartLinePrice line={line} as="span" />
         </div>
 
-        <ul style={{fontSize:'14px',fontWeight:'500',maxWidth:'95px'}}>
+        <ul style={{fontSize:'13px',fontWeight:'500',maxWidth:'95px'}}>
           {selectedOptions.map((option) => (
-            <li key={option.name}>
+            <li style={{marginBottom:'5px'}} key={option.name}>
               <small style={{display:'flex', width:'100%', justifyContent:'space-between'}}>
                 {option.name}: <span style={{}}>{option.value}</span>
               </small>
@@ -210,7 +210,7 @@ function CartLineQuantity({line}) {
         </button>
       </CartLineUpdateButton>
       &nbsp;
-      <small> {quantity} &nbsp;&nbsp;</small>
+      <small style={{fontSize:'13px'}}> {quantity} &nbsp;&nbsp;</small>
       <CartLineUpdateButton lines={[{id: lineId, quantity: nextQuantity}]}>
         <button
           aria-label="Increase quantity"
@@ -311,10 +311,9 @@ function CartDiscounts({discountCodes}) {
 
       {/* Show an input to apply a discount */}
       <UpdateDiscountForm discountCodes={codes}>
-        <div style={{display:'flex', justifyContent:'space-between',alignItems:'center'}}>
+        <div style={{display:'flex', justifyContent:'space-between',alignItems:'baseline'}}>
           <input style={{borderRadius:'0px'}} type="text" name="discountCode" placeholder="Discount code" />
-          &nbsp;
-          <button style={{maxHeight:'36px.36', height:'36px.6',background:'black',color:'white', cursor:'pointer'}} type="submit">Apply</button>
+          <button style={{ height:'32px', width:'170px',background:'black',color:'white', cursor:'pointer'}} type="submit">APPLY</button>
         </div>
       </UpdateDiscountForm>
     </div>
