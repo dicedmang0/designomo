@@ -647,7 +647,7 @@ input[type=search]{
     scale: 1;
   }
   100%{
-    transform: translate(7px, -780px);
+    transform: translate(-1px, -780px);
     scale: 0.4;
   }
 }
@@ -1009,6 +1009,10 @@ max-width: 461px;
 }
 .product-form{
   display: flex;
+}
+.header-menu-desktop{
+  display: flex;
+  flex-direction: column;
 }
 
 /*
