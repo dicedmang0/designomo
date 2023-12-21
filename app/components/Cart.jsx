@@ -1,6 +1,7 @@
 import {CartForm, Image, Money} from '@shopify/hydrogen';
 import {Link} from '@remix-run/react';
 import {useVariantUrl} from '~/utils';
+import Rbtn from '../Assets/removebtn.png';
 
 /**
  * @param {CartMainProps}
@@ -77,14 +78,14 @@ function CartLineItem({layout, line}) {
           alt={title}
           aspectRatio="1/1"
           data={image}
-          height={100}
+          height={130}
           loading="lazy"
-          width={100}
+          width={130}
         />
       )}
 
-      <div>
-        <div style={{display:'flex', fontSize:'11px', justifyContent:'space-between',alignItems:'center'}}>
+      <div style={{display:'flex', flexDirection:'column', width:'100%', fontFamily:'Arial',paddingRight:'5px'}}> 
+        <div style={{display:'flex', fontSize:'11px', justifyContent:'space-between',alignItems:'flex-start'}}>
         <Link
           prefetch="intent"
           to={lineItemUrl}
@@ -95,18 +96,18 @@ function CartLineItem({layout, line}) {
             }
           }}
         >
-          <p style={{fontSize:'12px', textTransform:'uppercase'}}>
+          <p style={{fontSize:'12px', textTransform:'uppercase', maxWidth:'120px'}}>
             <strong>{product.title}</strong>
           </p>
         </Link>
         <CartLinePrice line={line} as="span" />
         </div>
 
-        <ul>
+        <ul style={{fontSize:'14px',fontWeight:'500',maxWidth:'95px'}}>
           {selectedOptions.map((option) => (
             <li key={option.name}>
-              <small>
-                {option.name}: {option.value}
+              <small style={{display:'flex', width:'100%', justifyContent:'space-between'}}>
+                {option.name}: <span style={{}}>{option.value}</span>
               </small>
             </li>
           ))}
@@ -126,7 +127,7 @@ function CartCheckoutActions({checkoutUrl}) {
   return (
     <div style={{display:'flex', justifyContent:'center'}}>
       <a href={checkoutUrl} target="_self">
-        <button style={{width:'321.001px', height:'40px', background:'black',color:'white'}}>
+        <button style={{width:'360px', maxWidth:'360px', height:'40px', background:'black',color:'white',cursor:'pointer'}}>
           CHECKOUT
         </button>
       </a>
@@ -149,14 +150,18 @@ export function CartSummary({cost, layout, children = null}) {
   return (
     <div aria-labelledby="cart-summary" className={className}>
       <dl className="cart-subtotal">
-        <strong>TOTAL</strong>
-        <strong>
+        <strong style={{fontSize:'14px'}}>TOTAL</strong>
+        <strong style={{fontSize:'14px', fontStyle:'italic',letterSpacing:'-0.715px'}}>
           {cost?.subtotalAmount?.amount ? (
             <Money data={cost?.subtotalAmount} />
           ) : (
             '-'
           )}
         </strong>
+      </dl>
+      <dl style={{display:'flex',justifyContent:'space-between',fontSize:'14px'}} >
+        <strong style={{letterSpacing:'-0.715px'}}>SHIPPING</strong>
+        <span style={{fontStyle:'italic',letterSpacing:'-0.715px'}}>CALCULATED AT CHECKOUT</span>
       </dl>
       {children}
     </div>
@@ -173,7 +178,7 @@ function CartLineRemoveButton({lineIds}) {
       action={CartForm.ACTIONS.LinesRemove}
       inputs={{lineIds}}
     >
-      <button type="submit">Remove</button>
+      <button style={{marginTop:'10px'}} type="submit"><img src={Rbtn} alt='remove-button' /></button>
     </CartForm>
   );
 }
@@ -189,7 +194,11 @@ function CartLineQuantity({line}) {
 
   return (
     <div className="cart-line-quantiy">
-      <small>Quantity:</small>
+      <div style={{display:'flex', width:'100%', justifyContent:'space-between', maxWidth:'100px'}}>
+        <div>
+          <small>Qty:</small>
+        </div>
+        <div style={{display:'flex'}}>
       <CartLineUpdateButton lines={[{id: lineId, quantity: prevQuantity}]}>
         <button
           aria-label="Decrease quantity"
@@ -211,7 +220,8 @@ function CartLineQuantity({line}) {
           <span>&#43;</span>
         </button>
       </CartLineUpdateButton>
-      &nbsp;
+        </div>
+      </div>
       <CartLineRemoveButton lineIds={[lineId]} />
     </div>
   );
@@ -237,7 +247,7 @@ function CartLinePrice({line, priceType = 'regular', ...passthroughProps}) {
   }
 
   return (
-    <div>
+    <div style={{fontStyle:'italic', fontFamily:'Arial',fontWeight:'500', letterSpacing:'-0.715px'}}>
       <Money withoutTrailingZeros {...passthroughProps} data={moneyV2} />
     </div>
   );
@@ -301,10 +311,10 @@ function CartDiscounts({discountCodes}) {
 
       {/* Show an input to apply a discount */}
       <UpdateDiscountForm discountCodes={codes}>
-        <div style={{display:'flex', justifyContent:'center'}}>
+        <div style={{display:'flex', justifyContent:'space-between',alignItems:'center'}}>
           <input style={{borderRadius:'0px'}} type="text" name="discountCode" placeholder="Discount code" />
           &nbsp;
-          <button type="submit">Apply</button>
+          <button style={{maxHeight:'36px.36', height:'36px.6',background:'black',color:'white', cursor:'pointer'}} type="submit">Apply</button>
         </div>
       </UpdateDiscountForm>
     </div>

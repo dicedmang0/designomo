@@ -103,8 +103,7 @@ export function Footer({menu, shop}) {
         </div>
       </div>
       )
-};
-      {/* <FooterMenu menu={menu} primaryDomainUrl={shop.primaryDomain.url} /> */}
+}
     </footer>
   );
 }
@@ -147,7 +146,7 @@ function FooterMenu({menu, primaryDomainUrl}) {
         );
       })}
     </nav>
-  );
+  )
 }
 
 const FALLBACK_FOOTER_MENU = {

@@ -74,33 +74,32 @@ export default function Login() {
 
   return (
     <div className="login">
-      <h1>Sign in.</h1>
-      <Form method="POST">
-        <fieldset>
-          <label htmlFor="email">Email address</label>
+      <div className="login-container"><h2 style={{marginBottom:'30px'}}>LOG IN</h2>
+      <span style={{letterSpacing:'-0.78px',fontSize:'14px', marginBottom:'20px'}}>DONT HAVE AN ACCOUNT? <Link style={{textDecorationLine:'underline'}} to="/account/register">SIGN UP</Link> </span>
+      <Form style={{marginTop:'10px'}} method="POST">
           <input
+          style={{minWidth:'250px', height:'20px', borderRadius:'0px'}}
             id="email"
             name="email"
             type="email"
             autoComplete="email"
             required
-            placeholder="Email address"
+            placeholder="ENTER EMAIL ADDRESS"
             aria-label="Email address"
             // eslint-disable-next-line jsx-a11y/no-autofocus
             autoFocus
           />
-          <label htmlFor="password">Password</label>
           <input
+          style={{minWidth:'250px', height:'20px', borderRadius:'0px'}}
             id="password"
             name="password"
             type="password"
             autoComplete="current-password"
-            placeholder="Password"
+            placeholder="ENTER PASSWORD"
             aria-label="Password"
             minLength={8}
             required
           />
-        </fieldset>
         {error ? (
           <p>
             <mark>
@@ -110,17 +109,17 @@ export default function Login() {
         ) : (
           <br />
         )}
-        <button type="submit">Sign in</button>
+        <button style={{minWidth:'269px', borderRadius:'0px', background:'black', color:'white', height:'40px'}} type="submit">SIGN IN</button>
       </Form>
       <br />
-      <div>
-        <p>
-          <Link to="/account/recover">Forgot password →</Link>
-        </p>
-        <p>
-          <Link to="/account/register">Register →</Link>
+      <div style={{display:"flex"}}>
+        <span style={{fontSize:'14px', letterSpacing:'-0.78px'}}>FORGOT YOUR PASSWORD</span>
+        <p style={{fontSize:'14px', letterSpacing:"-0.78px", marginLeft:'10px', textDecorationLine:'underline'}}>
+          <Link to="/account/recover">CLICK HERE</Link>
         </p>
       </div>
+      </div>
+      
     </div>
   );
 }

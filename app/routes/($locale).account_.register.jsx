@@ -102,44 +102,44 @@ export default function Register() {
   const error = data?.error || null;
   return (
     <div className="login">
-      <h1>Register.</h1>
-      <Form method="POST">
-        <fieldset>
-          <label htmlFor="email">Email address</label>
+      <h1>SIGN UP</h1>
+      
+      <span style={{letterSpacing:'-0.78px',fontSize:'14px', marginBottom:'20px'}}>ALREADY HAVE AN ACCOUNT? <Link style={{textDecorationLine:'underline'}} to="/account/login">LOG IN</Link> </span>
+      <Form style={{display:'flex',flexDirection:'column'}} method="POST">
           <input
+          style={{minWidth:'250px', height:'20px', borderRadius:'0px'}}
             id="email"
             name="email"
             type="email"
             autoComplete="email"
             required
-            placeholder="Email address"
+            placeholder="EMAIL ADDRESS"
             aria-label="Email address"
             // eslint-disable-next-line jsx-a11y/no-autofocus
             autoFocus
           />
-          <label htmlFor="password">Password</label>
           <input
+          style={{minWidth:'250px', height:'20px', borderRadius:'0px'}}
             id="password"
             name="password"
             type="password"
             autoComplete="current-password"
-            placeholder="Password"
+            placeholder="PASSWORD"
             aria-label="Password"
             minLength={8}
             required
           />
-          <label htmlFor="passwordConfirm">Re-enter password</label>
           <input
+          style={{minWidth:'250px', height:'20px', borderRadius:'0px'}}
             id="passwordConfirm"
             name="passwordConfirm"
             type="password"
             autoComplete="current-password"
-            placeholder="Re-enter password"
+            placeholder="RE-ENTER PASSWORD"
             aria-label="Re-enter password"
             minLength={8}
             required
           />
-        </fieldset>
         {error ? (
           <p>
             <mark>
@@ -149,12 +149,9 @@ export default function Register() {
         ) : (
           <br />
         )}
-        <button type="submit">Register</button>
+        <button style={{minWidth:'269px', borderRadius:'0px', background:'black', color:'white', height:'40px'}} type="submit">Register</button>
       </Form>
       <br />
-      <p>
-        <Link to="/account/login">Login →</Link>
-      </p>
     </div>
   );
 }

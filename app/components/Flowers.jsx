@@ -4,12 +4,12 @@ import SC2 from '../Assets/Summer-Capsule-3.png';
 import SC3 from '../Assets/Summer-Capsule-2.png';
 import Slider from 'react-slick';
 
-function SummerCapsule() {
+function Flowers() {
   const settings = {
     dots: false,
     infinite: true,
     speed: 500,
-    slidesToShow: 2,
+    slidesToShow: 3,
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 3000,
@@ -41,10 +41,10 @@ function SummerCapsule() {
         </Slider>
         </div>
         <div className='Lookbook-Title'>
-            <h1>SUMMER CAPSULE 2023</h1>
+            <h1>2023SUMMERCAPSULE</h1>
         </div>
     </div>
   )
 }
 
-export default SummerCapsule
+export default Flowers;

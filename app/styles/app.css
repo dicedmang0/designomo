@@ -36,6 +36,11 @@ LookBook Detail
     margin-left: 20px;
   }
 }
+.Lookbook-Title{
+  @media (max-width:768px) {
+    max-width: 300px;
+  }
+}
 .slick-slide{
   max-width: 500px;
   float: inline-start;
@@ -77,6 +82,11 @@ aside {
   right: calc(-1 * var(--aside-width));
   top: 0;
   transition: transform 200ms ease-in-out;
+  overflow: auto;
+  @media (max-width:768px) {
+    min-width: 100vw;
+    max-width: 100%;
+  }
 }
 
 aside header {
@@ -150,6 +160,13 @@ aside li {
   width: calc(100% - var(--aside-width));
 }
 
+.recommended-products{
+  grid-column: 1 / -1;
+  @media (max-width:768px) {
+    margin-top: 50px;
+  }
+}
+
 .overlay .light {
   background: rgba(255, 255, 255, 0.5);
 }
@@ -204,8 +221,11 @@ aside li {
 }
 .Header-logo{
   width: 15%;
+  position: absolute;
+  right: 50%;
   @media (max-width:768px) {
-   
+   position: relative;
+   right: unset;
   width: 40%; 
   }
 }
@@ -214,6 +234,8 @@ aside li {
   display: flex;
   flex-direction: column;
   grid-gap: 1rem;
+  align-items: center;
+  font-weight: bold;
 }
 
 .header-menu-desktop {
@@ -450,10 +472,13 @@ aside li {
   padding-top: 0.75rem;
   position: absolute;
   width: calc(var(--aside-width) - 40px);
+  padding-bottom: 0.75rem;
 }
 
 .cart-line-quantiy {
   display: flex;
+  flex-direction: column;
+  font-style: italic;
 
 }
 .cart-line-quantiy button{
@@ -477,27 +502,111 @@ aside li {
 * components/Search
 * --------------------------------------------------
 */
+/* Style the dropdown button */
+/* Style the dropdown button */
+.dropbtn {
+  padding: 0px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+}
+input{
+  font-size: 12px;
+}
+input[type=search]{
+  box-sizing: border-box;
+  border: none;
+  border-bottom: 2px solid black;
+  border-radius: 0px;
+}
+
+/* Style the dropdown content (hidden by default) */
+.dropdown-content {
+  max-height: 0;
+  overflow: hidden;
+  min-width: 160px;
+  z-index: 1;
+}
+.dropdown{
+  @media (max-width:768px) {
+    text-align: center;  
+    font-weight: bold;
+  }
+}
+/* Show the dropdown content when the dropdown button is clicked on */
+.show {
+  max-height: 400px;
+}
+
+/* Style the dropdown links */
+.dropdown-content a {
+  color: black;
+  padding: 5px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change the background color of dropdown links on hover */
+/* .dropdown-content a:hover {
+  background-color: #f1f1f1;
+} */
+.recommended-products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.recommended-product-card {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+}
+
+.recommended-product-image {
+  width: 100%;
+  aspect-ratio: 1/1;
+  overflow: hidden;
+}
+
+.recommended-product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.recommended-product-info {
+  padding: 0.5rem;
+}
+
+.recommended-product-info h4 {
+  margin: 0.5rem 0;
+}
+
+.recommended-product-price {
+  font-weight: bold;
+}
+
+
 
 .predictive-search {
   height: calc(100vh - var(--header-height) - 40px);
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
 }
 
 .predictive-search-form {
+  background: var(--color-light);
   position: sticky;
   top: 0;
 }
 
 .predictive-search-result {
   margin-bottom: 2rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-content: space-between;
 }
 
 .predictive-search-result h5 {
@@ -511,17 +620,11 @@ aside li {
 .predictive-search-result-item a {
   align-items: center;
   display: flex;
-  flex-direction: column;
 }
 
 .predictive-search-result-item a img {
   margin-right: 0.75rem;
   height: 100%;
-}
-.predictive-search-result-item .products{
-  max-height: 75vh;
-  display: flex;
-  flex-wrap: wrap;
 }
 
 .search-result {
@@ -530,6 +633,12 @@ aside li {
 
 .search-results-item {
   margin-bottom: 0.5rem;
+}
+.search{
+  padding: 150px 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /*
@@ -752,12 +861,35 @@ aside li {
   column-gap: 6rem;
   grid-template-columns: repeat(auto-fit, minmax(var(--grid-item-width), 1fr));
   margin-bottom: 2rem;
+  @media (max-width:768px) {
+    grid-template-columns: auto auto;
+    row-gap: 4rem;
+    column-gap: 3rem;
+  }
+}
+.login{
+  padding: 250px 150px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  @media (max-width:768px) {
+    padding: 200px 50px;
+  }
+}
+.login-container{
+  max-width: 228px;
 }
 
 .product-item img {
   height: auto;
   width: 100%;
 }
+.product-item h4{
+  text-transform: uppercase;
+  letter-spacing: -0.836px;
+}
+.nav-
 /*
 * --------------------------------------------------
 * routes/return-policy.jsx
@@ -859,7 +991,7 @@ text-transform: uppercase;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  padding: 240px 235px;
+  padding: 240px 345px;
   @media (max-width: 768px) {
     padding: 150px 50px;
     height: auto;
@@ -989,9 +1121,10 @@ max-width: 461px;
 
 .product-main {
   align-self: start;
-  position: sticky;
-  top: 0rem;
   padding-top: 120px;
+  @media (max-width:768px) {
+    padding-top: 50px;
+  }
 }
 
 .product-price-on-sale {

@@ -2,10 +2,24 @@ import {json} from '@shopify/remix-oxygen';
 import {Link, useLoaderData, useLocation} from '@remix-run/react';
 import {useRef,useState,useEffect} from 'react';
 import DraggableElement from '../components/DraggableElement';
-import LB1 from '../Assets/LB1.png';
-import LB2 from '../Assets/LB2.png';
-import LB3 from '../Assets/LB3(2).png';
-import SummerCapsule from '../components/SummerCapsule';
+import LB1 from '../Assets/DREAM.png';
+import LB2 from '../Assets/FLEETING.png';
+import LB3 from '../Assets/FLOWERS.png';
+import LB4 from '../Assets/LOOK.png';
+import LB5 from '../Assets/OMOW.png';
+import LB6 from '../Assets/OMOX.png';
+import LBM1 from '../Assets/LookBookMobile/Group11.png';
+import LBM2 from '../Assets/LookBookMobile/Group12.png';
+import LBM3 from '../Assets/LookBookMobile/Group24.png';
+import LBM4 from '../Assets/LookBookMobile/Group25.png';
+import LBM5 from '../Assets/LookBookMobile/Group26.png';
+import LBM6 from '../Assets/LookBookMobile/Group42.png';
+import TechnicolorDreams from '../components/TechnicolorDreams';
+import Flowers from '../components/Flowers';
+import Look from '../components/Look';
+import Omox from '../components/Omox';
+import OmoW from '../components/OmoWorld';
+import FleetingThreads from '../components/FleetingThreads';
 import ContactUs from '../components/Contactus';
 import ReturnPolicy from '../components/Returnpolicy';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
@@ -115,50 +129,80 @@ export default function Page() {
           <div className="draggable-container">
           <DraggableElement startPosition={{x: 20, y: 59}}>
             <div className="draggable-item">
-              <img src={LB1} />
+              <img src={LBM1} />
             </div>
           </DraggableElement>
 
           <DraggableElement startPosition={{x: 46, y: 180}}>
             <div className="draggable-item">
-              <img src={LB2} />
+              <img src={LBM2} />
             </div>
           </DraggableElement>
 
           <DraggableElement startPosition={{x: 50, y: 304}}>
             <div className="draggable-item">
-              <img src={LB3} />
+              <img src={LBM3} />
             </div>
           </DraggableElement>
           {/* Add more DraggableElement components for additional draggable elements */}
         </div>
           ): (
             <div className="draggable-container">
-              <Link to="/pages/summer-capsule-2023">
-              <DraggableElement startPosition={{x: 333, y: 59}}>
+              <Link to="/pages/technicolor-dreams">
+              <DraggableElement startPosition={{x: 543, y: 426}}>
                 <div className="draggable-item">
                   <img src={LB1} />
                 </div>
               </DraggableElement>
               </Link>
-  
-              <DraggableElement startPosition={{x: 680, y: 180}}>
+              <Link to='/pages/fleeting-threads'>
+              <DraggableElement startPosition={{x: 659, y: 200}}>
                 <div className="draggable-item">
                   <img src={LB2} />
                 </div>
-              </DraggableElement>
+              </DraggableElement></Link>
   
-              <DraggableElement startPosition={{x: 500, y: 304}}>
+              <Link to='/pages/flowers-dont-dance'>
+              <DraggableElement startPosition={{x: -360, y: 144}}>
                 <div className="draggable-item">
                   <img src={LB3} />
                 </div>
+              </DraggableElement></Link>
+              <Link to='/pages/look-cool-2023'>
+              <DraggableElement startPosition={{x: -630, y: 1294}}>
+                <div className="draggable-item">
+                  <img src={LB4} />
+                </div>
+              </DraggableElement></Link>
+              <Link to='/pages/its-an-omos-world'>
+              <DraggableElement startPosition={{x: -500, y: 1155}}>
+                <div className="draggable-item">
+                  <img src={LB5} />
+                </div>
+              </DraggableElement></Link>
+              <Link to='/pages/omo-x-agittaria'>
+              <DraggableElement startPosition={{x: -500, y: 864}}>
+                <div className="draggable-item">
+                  <img src={LB6} />
+                </div>
               </DraggableElement>
+              </Link>
               {/* Add more DraggableElement components for additional draggable elements */}
             </div>
           )}
         </div>
-      ) : page.title === 'Summer-Capsule-2023' ? (
-        <SummerCapsule/>
+      ) : page.title === 'technicolor-dreams' ? (
+        <TechnicolorDreams/>
+      ): page.title === 'its-an-omos-world' ?(
+        <OmoW/>
+      ): page.title === 'omo-x-agittaria' ?(
+        <Omox/>
+      ): page.title === 'fleeting-threads' ?(
+        <FleetingThreads/>
+      ): page.title === 'flowers-dont-dance' ?(
+        <Flowers/>
+      ): page.title === 'look-&-cool-2023' ?(
+        <Look/>
       ): page.title === 'Contact-us' ?(
         <ContactUs/>
       ): page.title === 'Return-Policy' ?(
@@ -169,7 +213,6 @@ export default function Page() {
     </div>
   );
 }
-
 const PAGE_QUERY = `#graphql
   query Page(
     $language: LanguageCode,

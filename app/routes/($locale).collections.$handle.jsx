@@ -110,7 +110,7 @@ function ProductItem({product, loading}) {
           sizes="(min-width: 45em) 400px, 100vw"
         />
       )}
-      <h4 style={{textAlign: 'center', fontFamily:'Arial'}}>{product.title}</h4>
+      <h4 style={{textAlign: 'center', fontFamily:'Arial',textTransform:'uppercase'}}>{product.title}</h4>
       <small style={{textAlign:'center', fontFamily:'Arial', fontStyle:'italic'}}>
         <Money data={product.priceRange.minVariantPrice} />
       </small>

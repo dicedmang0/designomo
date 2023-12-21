@@ -103,16 +103,17 @@ function redirectToFirstVariant({product, request}) {
   );
 }
 
-/**
- * @param {{
-*   products: Promise<RecommendedProductsQuery>;
-* }}
-*/
+
 export default function Product() {
   /** @type {LoaderReturnData} */
-  const {product, variants, data} = useLoaderData();
+  const  data = useLoaderData();
+  console.log('Data in Product:', data);
+  if (!data) {
+    return <div>Loading data or data is not available...</div>;
+  }
+  const { product, variants } = data;
+  console.log(data)
   const {selectedVariant} = product;
-  const recommendedProducts = data?.recommendedProducts || [];
   return (
     <div className="product">
       <ProductImage image={selectedVariant?.image} />
@@ -121,7 +122,7 @@ export default function Product() {
         product={product}
         variants={variants}
       />
-    {/* <RecommendedProducts products={recommendedProducts} /> */}
+        <RecommendedProducts products={data.recommendedProducts} />
     </div>
   );
 }
@@ -160,6 +161,7 @@ function ProductMain({selectedVariant, product, variants}) {
   const [isOpen, setIsOpen] = useState(false);
   const [sizeOpen, setSizeOpen] = useState(false);
   const data = useLoaderData();
+  console.log(data)
   const toggleAccordion = () => {
     setIsOpen(!isOpen);
   };
@@ -228,8 +230,6 @@ function ProductMain({selectedVariant, product, variants}) {
           <a href="#cart-aside">CHECKOUT</a>
         </button>
       </div>
-      
-    <RecommendedProducts products={data.recommendedProducts} />
     </div>
   );
 }
@@ -379,7 +379,7 @@ function RecommendedProducts({products}) {
   // }
  return (
    <div className="recommended-products">
-     <h2>Recommended Products</h2>
+     <h2>Related Products</h2>
      <Suspense fallback={<div>Loading...</div>}>
        <Await resolve={products}>
          {({products}) => (
@@ -395,7 +395,7 @@ function RecommendedProducts({products}) {
                    aspectRatio="1/1"
                    sizes="(min-width: 45em) 20vw, 50vw"
                  />
-                 <h4>{product.title}</h4>
+                 <h4 style={{textTransform:'uppercase'}}>{product.title}</h4>
                  <small>
                    <Money data={product.priceRange.minVariantPrice} />
                  </small>

@@ -34,7 +34,7 @@ export function Header({header, isLoggedIn, cart}) {
       <HeaderMenuMobileToggle />
       <SearchToggle />
       
-      <NavLink prefetch="intent" to="/" style={{width:'50%', display: 'flex', justifyContent:'center',flexWrap:'wrap',alignSelf:'flex-start'}} end>
+      <NavLink prefetch="intent" to="/" style={{width:'50%', display: 'flex', justifyContent:'center',flexWrap:'wrap',alignSelf:'flex-start', position:'relative'}} end>
           <img className='Header-logo' src={shop.brand.logo.image.url} />
         </NavLink>
       <div className='Left-group-btn'>
@@ -56,8 +56,8 @@ export function Header({header, isLoggedIn, cart}) {
         />
         <BackButton/>
           </div>
-        <NavLink prefetch="intent" to="/" style={{width:'50%', display: 'flex', justifyContent:'center',flexWrap:'wrap',alignSelf:'flex-start'}} end>
-          <img style={{width: '15%'}} src={shop.brand.logo.image.url} />
+        <NavLink prefetch="intent" to="/" style={{width:'50%', display: 'flex', justifyContent:'center',flexWrap:'wrap',alignSelf:'flex-start',position:'relative'}} end>
+          <img className='Header-logo'  src={shop.brand.logo.image.url} />
         </NavLink>
         <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} />
         </div>

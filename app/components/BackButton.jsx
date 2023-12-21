@@ -11,9 +11,9 @@ function BackButton() {
   const isProductRoute = location.pathname.startsWith('/products/');
 
   return (
-    <div style={{position: 'absolute',top:'170px',left:'20px'}}>
+    <div style={{position: 'relative'}}>
       {isProductRoute && (
-        <button style={{fontFamily:'system-ui', backgroundColor:'transparent',border:'0px', fontWeight:'bold', fontSize:'16px', marginTop:'60px', letterSpacing: '-0.845px', cursor:'pointer',
+        <button style={{fontFamily:'Arial', width:'65px', right:'10px', top:'30px', backgroundColor:'transparent',border:'0px', fontWeight:'bold', fontSize:'14px', letterSpacing: '-0.845px', cursor:'pointer', position:'absolute'
     }} onClick={goBack}>
            &lt; BACK
         </button>

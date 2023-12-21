@@ -1,7 +1,7 @@
 import {Link, Form, useParams, useFetcher, useFetchers} from '@remix-run/react';
 import {Image, Money, Pagination} from '@shopify/hydrogen';
 import React, {useRef, useEffect} from 'react';
-
+import icon from '../Assets/Search-ico.png';
 export const NO_PREDICTIVE_SEARCH_RESULTS = [
   {type: 'queries', items: []},
   {type: 'products', items: []},
@@ -37,7 +37,7 @@ export function SearchForm({searchTerm}) {
   }, []);
 
   return (
-    <Form method="get">
+    <Form style={{display:'flex',justifyContent:'center'}} method="get">
       <input
         defaultValue={searchTerm}
         name="q"
@@ -46,7 +46,9 @@ export function SearchForm({searchTerm}) {
         type="search"
       />
       &nbsp;
-      <button type="submit">Search</button>
+      <button type="submit">
+        <img src={icon}/>
+      </button>
     </Form>
   );
 }
@@ -65,6 +67,13 @@ export function SearchResults({results}) {
         keys.map((type) => {
           const resourceResults = results[type];
 
+          if (resourceResults.nodes[0]?.__typename === 'Page') {
+            const pageResults = resourceResults;
+            return resourceResults.nodes.length ? (
+              <SearchResultPageGrid key="pages" pages={pageResults} />
+            ) : null;
+          }
+
           if (resourceResults.nodes[0]?.__typename === 'Product') {
             const productResults = resourceResults;
             return resourceResults.nodes.length ? (
@@ -74,14 +83,6 @@ export function SearchResults({results}) {
               />
             ) : null;
           }
-          if (resourceResults.nodes[0]?.__typename === 'Page') {
-            const pageResults = resourceResults;
-            return resourceResults.nodes.length ? (
-              <SearchResultPageGrid key="pages" pages={pageResults} />
-            ) : null;
-          }
-
-          
 
           if (resourceResults.nodes[0]?.__typename === 'Article') {
             const articleResults = resourceResults;
@@ -103,23 +104,15 @@ export function SearchResults({results}) {
  * @param {Pick<SearchQuery, 'products'>}
  */
 function SearchResultsProductsGrid({products}) {
-  
-  console.log(products.nodes);
   return (
     <div className="search-result">
       <h2>Products</h2>
       <Pagination connection={products}>
         {({nodes, isLoading, NextLink, PreviousLink}) => {
           const itemsMarkup = nodes.map((product) => (
-            
             <div className="search-results-item" key={product.id}>
-              {product.image && (
-                  <Image src={product.image.url} alt={product.image.altText} />
-                )}
               <Link prefetch="intent" to={`/products/${product.handle}`}>
-              
                 <span>{product.title}</span>
-                
               </Link>
             </div>
           ));
@@ -303,6 +296,33 @@ function NoPredictiveSearchResults({searchTerm}) {
 }
 
 /**
+ * @param {SearchResultTypeProps}
+ */
+function PredictiveSearchResult({goToSearchResult, items, searchTerm, type}) {
+  const isSuggestions = type === 'queries';
+  const categoryUrl = `/search?q=${
+    searchTerm.current
+  }&type=${pluralToSingularSearchType(type)}`;
+
+  return (
+    <div className="predictive-search-result" key={type}>
+      <Link prefetch="intent" to={categoryUrl} onClick={goToSearchResult}>
+        <h5>{isSuggestions ? 'Suggestions' : type}</h5>
+      </Link>
+      <ul>
+        {items.map((item) => (
+          <SearchResultItem
+            goToSearchResult={goToSearchResult}
+            item={item}
+            key={item.id}
+          />
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+/**
  * @param {SearchResultItemProps}
  */
 function SearchResultItem({goToSearchResult, item}) {
@@ -313,8 +333,8 @@ function SearchResultItem({goToSearchResult, item}) {
           <Image
             alt={item.image.altText ?? ''}
             src={item.image.url}
-            width={150}
-            height={150}
+            width={50}
+            height={50}
           />
         )}
         <div>
@@ -335,33 +355,6 @@ function SearchResultItem({goToSearchResult, item}) {
         </div>
       </Link>
     </li>
-  );
-}
-
-/**
- * @param {SearchResultTypeProps}
- */
-function PredictiveSearchResult({goToSearchResult, items, searchTerm, type}) {
-  const isSuggestions = type === 'queries';
-  const categoryUrl = `/search?q=${
-    searchTerm.current
-  }&type=${pluralToSingularSearchType(type)}`;
-
-  return (
-    <div className="predictive-search-result" key={type}>
-      <Link prefetch="intent" to={categoryUrl} onClick={goToSearchResult}>
-        <h5>{isSuggestions ? 'Suggestions' : type}</h5>
-      </Link>
-    <ul >
-      {items.map((item) => (
-        <SearchResultItem
-          goToSearchResult={goToSearchResult}
-          item={item}
-          key={item.id}
-        />
-      ))}
-    </ul>
-    </div>
   );
 }
 
@@ -436,8 +429,8 @@ function pluralToSingularSearchType(type) {
  */
 /**
  * @typedef {Array<
+ *   | {type: 'queries'; items: Array<NormalizedPredictiveSearchResultItem>}
  *   | {type: 'products'; items: Array<NormalizedPredictiveSearchResultItem>}
- *   | {type: 'query'; items: Array<NormalizedPredictiveSearchResultItem>}
  *   | {type: 'collections'; items: Array<NormalizedPredictiveSearchResultItem>}
  *   | {type: 'pages'; items: Array<NormalizedPredictiveSearchResultItem>}
  *   | {type: 'articles'; items: Array<NormalizedPredictiveSearchResultItem>}

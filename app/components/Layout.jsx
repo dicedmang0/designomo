@@ -8,26 +8,33 @@ import {
   PredictiveSearchForm,
   PredictiveSearchResults,
 } from '~/components/Search';
-
+import { useLocation } from '@remix-run/react';
 
 /**
  * @param {LayoutProps}
  */
 export function Layout({cart, children = null, footer, header, isLoggedIn}) {
-  
+  const location = useLocation(); // Get the current location
+  const pathname = location.pathname;
+  const showHeaderAndFooter = !(pathname === '/account/login' || pathname === '/account/register');
   return (
     <>
-    
+    {showHeaderAndFooter && (
+      <>
       <CartAside cart={cart} />
-      <SearchAside />
-      <MobileMenuAside menu={header.menu} shop={header.shop} />
-      <Header header={header} cart={cart} isLoggedIn={isLoggedIn} />
+        <SearchAside />
+        <MobileMenuAside menu={header.menu} shop={header.shop} />
+        <Header header={header} cart={cart} isLoggedIn={isLoggedIn} />
+      </>
+    )}
       <main>{children}</main>
-      <Suspense>
-        <Await resolve={footer}>
-          {(footer) => <Footer menu={footer.menu} shop={header.shop} />}
-        </Await>
-      </Suspense>
+      {showHeaderAndFooter && (
+        <Suspense>
+          <Await resolve={footer}>
+            {(footer) => <Footer menu={footer.menu} shop={header.shop} />}
+          </Await>
+        </Suspense>
+      )}
     </>
   );
 }
