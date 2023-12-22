@@ -201,9 +201,6 @@ function ProductMain({selectedVariant, product, variants}) {
           <div dangerouslySetInnerHTML={{__html: descriptionHtml}} />
       </div>
       <br />
-      
-      <div className="Clean_Size_Chart"></div>
-      <br />
       <br />
       <div className="Button-container" style={{display: 'flex'}}>
         <AddToCartButton
@@ -308,7 +305,7 @@ function ProductForm({product, selectedVariant, variants}) {
 function ProductOptions({option}) {
   return (
     <div className="product-options" key={option.name}>
-      <h5>{option.name}</h5>
+      <strong>{option.name}</strong>
       <div className="product-options-grid">
         {option.values.map(({value, isAvailable, isActive, to, url}) => {
           return (

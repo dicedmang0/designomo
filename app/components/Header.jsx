@@ -180,7 +180,7 @@ function HeaderCtas({isLoggedIn, cart}) {
 function HeaderMenuMobileToggle() {
   return (
     <a className="header-menu-mobile-toggle" href="#mobile-menu-aside">
-      <h3>☰</h3>
+      <h3 style={{fontSize:'20px', margin:'0px', paddingBottom:'8px'}}>☰</h3>
     </a>
   );
 }
