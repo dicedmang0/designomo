@@ -1,7 +1,7 @@
 import {Suspense,useState} from 'react';
 import {defer, redirect} from '@shopify/remix-oxygen';
 import {Await, Link, useLoaderData} from '@remix-run/react';
-
+import Slider from "react-slick";
 import {
   Image,
   Money,
@@ -134,29 +134,29 @@ export default function Product() {
 function ProductImage({images}) {
   console.log(images);
   const [selectedImage, setSelectedImage] = useState(images[0]);
+  const settings = {
+    dots: true, // Show dot indicators
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    adaptiveHeight: true,
+  };
   if (!images) {
     return <div className="product-image" />;
   }
   return (
-    <div className="product-image-gallery">
-      <div className="selected-image">
-        <Image
-          alt={selectedImage.altText || 'Product Image'}
-          data={{ url: selectedImage.originalSrc }} // Use originalSrc as url
-          sizes="(min-width: 45em) 50vw, 100vw"
-        />
-      </div>
-      <div className="image-thumbnails">
-        {images.map((image, index) => (
-          <button key={image.id} onClick={() => setSelectedImage(images[index])}>
-            <Image
-              alt={image.altText || 'Thumbnail'}
-              data={{ url: image.originalSrc }} // Use originalSrc as url
-              sizes="100px"
+    <div className="product-image-slider">
+      <Slider {...settings}>
+        {images.map((image) => (
+          <div key={image.id}>
+            <img
+              src={image.originalSrc}
+              alt={image.altText || 'Product Image'}
             />
-          </button>
+          </div>
         ))}
-      </div>
+      </Slider>
     </div>
   );
 }

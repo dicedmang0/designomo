@@ -1014,6 +1014,27 @@ max-width: 461px;
   display: flex;
   flex-direction: column;
 }
+.account{
+  padding: 150px;
+}
+
+.product-image-slider{
+  max-width: 500px;
+  max-height: 600px;
+}
+
+.product-image-slider .slick-slide {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center;     /* Center vertically */
+  min-height: 600px;        /* Adjust the height as needed */
+}
+
+.product-image-slider img {
+  max-width: 100%;         /* Ensure image does not overflow */
+  max-height: 100%;        /* Adjust the height to fit within the slide */
+  object-fit: contain;     /* Keeps the aspect ratio of the image */
+}
 
 /*
 * --------------------------------------------------
@@ -1071,7 +1092,7 @@ max-width: 461px;
     min-width: 150px;
   }
   .product-main{
-    padding-top: 50px;
+    padding-top: 80px;
   }
   .product{
     padding: 100px 20px;
@@ -1233,7 +1254,7 @@ max-width: 461px;
   .header{
     padding-top: 0px;
   }
-  .recommended-product{
+  .recommended-products{
     margin-top: 50px;
   }
   aside{
@@ -1265,6 +1286,20 @@ max-width: 461px;
   }
   .login-container{
     max-width: 270px;
+  }
+  .account{
+    padding: 100px 50px;
+  }
+  .product-image-slider{
+    max-width: 328px;
+    max-height: 450px;
+  }
+  
+  .product-image-slider .slick-slide {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center;     /* Center vertically */
+    min-height: 450px;        /* Adjust the height as needed */
   }
 }
 
