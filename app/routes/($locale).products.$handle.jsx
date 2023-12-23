@@ -235,17 +235,23 @@ function ProductMain({selectedVariant, product, variants}) {
  * }}
  */
 function ProductPrice({selectedVariant}) {
+  if (!selectedVariant) {
+    return null; // Or some loading/fallback state
+  }
+  const { compareAtPrice, price } = selectedVariant;
+  const isOnSale = compareAtPrice && price && compareAtPrice.amount > price.amount;
+  console.log(selectedVariant);
   return (
     <div className="product-price">
       {selectedVariant?.compareAtPrice ? (
         <>
-          <p>Sale</p>
-          <br />
           <div className="product-price-on-sale">
-            {selectedVariant ? <Money data={selectedVariant.price} /> : null}
-            <s>
-              <Money data={selectedVariant.compareAtPrice} />
-            </s>
+            <span style={{ textDecoration: 'line-through', marginRight: '10px' }}>
+              {selectedVariant ? <Money data={selectedVariant.compareAtPrice} /> : null}
+            </span>
+            <span>
+              {selectedVariant ? <Money data={selectedVariant.price} /> : null}
+            </span>
           </div>
         </>
       ) : (
