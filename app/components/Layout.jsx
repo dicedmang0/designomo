@@ -73,7 +73,7 @@ function SearchAside() {
                 type="search"
               />
               &nbsp;
-              <button type="submit">Search</button>
+              <button style={{background:'black', color:'white', borderRadius:'0px', fontFamily:'Arial', fontSize:'10px', padding:'8px'}} type="submit">SEARCH</button>
             </div>
           )}
         </PredictiveSearchForm>

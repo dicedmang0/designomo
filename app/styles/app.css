@@ -66,7 +66,7 @@ aside header {
   display: flex;
   height: var(--header-height);
   justify-content: flex-end;
-  padding: 0 20px;
+  padding: 20px;
 }
 
 aside header h3 {
@@ -715,6 +715,14 @@ input[type=search]{
 */
 .collection{
   padding: 200px 190px;
+  display: flex;
+  flex-direction: column;
+}
+.collection button{
+  padding: 10px 85px;
+    color: white;
+    background: black;
+    cursor: pointer;
 }
 .collections-grid {
   display: grid;
@@ -744,7 +752,7 @@ input[type=search]{
   display: grid;
   row-gap: 8rem;
   column-gap: 6rem;
-  grid-template-columns: repeat(auto-fit, minmax(var(--grid-item-width), 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(calc(var(--grid-item-width) * 0.75), 1fr));
   margin-bottom: 2rem;
 }
 .login{
@@ -1319,6 +1327,9 @@ max-width: 461px;
   }
   .account-recover{
     padding: 100px 30px;
+  }
+  .collection button{
+    padding: 10px 40px;
   }
 }
 

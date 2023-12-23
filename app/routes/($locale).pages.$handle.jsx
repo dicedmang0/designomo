@@ -59,6 +59,13 @@ export default function Page() {
   console.log(page);
   const isBrowser = typeof window !== 'undefined';
   const [windowWidth, setWindowWidth] = useState(isBrowser ? window.innerWidth : 0);
+  const [isDragging, setIsDragging] = useState(false);
+  const handleDrag = (dragging) => {
+  setIsDragging(dragging);
+  };
+  const navigate = (path) => {
+    window.location.href = path;
+  };
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
@@ -170,8 +177,10 @@ export default function Page() {
         </div>
           ): (
             <div className="draggable-container">
-              <Link to="/pages/technicolor-dreams">
-              <DraggableElement startPosition={{x: 543, y: 426}}>
+              <Link to='/pages/technicolor-dreams'>
+              <DraggableElement 
+              startPosition={{x: 543, y: 426}}
+              >
                 <div className="draggable-item">
                   <img src={LB1} />
                 </div>

@@ -7,7 +7,7 @@ import {Pagination, getPaginationVariables, Image} from '@shopify/hydrogen';
  */
 export async function loader({context, request}) {
   const paginationVariables = getPaginationVariables(request, {
-    pageBy: 4,
+    pageBy: 105,
   });
 
   const {collections} = await context.storefront.query(COLLECTIONS_QUERY, {
@@ -28,11 +28,11 @@ export default function Collections() {
         {({nodes, isLoading, PreviousLink, NextLink}) => (
           <div>
             <PreviousLink>
-              {isLoading ? 'Loading...' : <span>↑ Load previous</span>}
+              {isLoading ? 'Loading...' : <button>LOAD PREVIOUS</button>}
             </PreviousLink>
             <CollectionsGrid collections={nodes} />
             <NextLink>
-              {isLoading ? 'Loading...' : <span>Load more ↓</span>}
+              {isLoading ? 'Loading...' : <button> LOAD MORE</button>}
             </NextLink>
           </div>
         )}

@@ -77,7 +77,14 @@ export function HeaderMenu({menu, primaryDomainUrl, viewport}) {
   const [openDropdown, setOpenDropdown] = useState(null);
 
   const handleDropdown = (itemId) => {
-    setOpenDropdown(openDropdown === itemId ? null : itemId);
+    if (openDropdown !== null && openDropdown !== itemId) {
+      setOpenDropdown(null);
+      // Optional: Add a slight delay before opening the new dropdown
+      setTimeout(() => setOpenDropdown(itemId), 1000);
+  } else {
+      // Toggle the current item's dropdown
+      setOpenDropdown(openDropdown === itemId ? null : itemId);
+  }
   };
   const {publicStoreDomain} = useRootLoaderData();
   const className = `header-menu-${viewport}`;
@@ -87,6 +94,7 @@ export function HeaderMenu({menu, primaryDomainUrl, viewport}) {
       event.preventDefault();
       window.location.href = event.currentTarget.href;
     }
+    setOpenDropdown(null)
   }
 
   return (

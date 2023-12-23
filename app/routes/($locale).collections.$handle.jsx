@@ -22,7 +22,7 @@ export async function loader({request, params, context}) {
   const {handle} = params;
   const {storefront} = context;
   const paginationVariables = getPaginationVariables(request, {
-    pageBy: 8,
+    pageBy: 40,
   });
 
   if (!handle) {
@@ -51,13 +51,13 @@ export default function Collection() {
       <Pagination connection={collection.products}>
         {({nodes, isLoading, PreviousLink, NextLink}) => (
           <>
-            <PreviousLink>
-              {isLoading ? 'Loading...' : <span>↑ Load previous</span>}
+            <PreviousLink style={{alignSelf:'center'}}>
+              {isLoading ? 'Loading...' : <button>LOAD PREVIOUS</button>}
             </PreviousLink>
             <ProductsGrid products={nodes} />
             <br />
-            <NextLink>
-              {isLoading ? 'Loading...' : <span>Load more ↓</span>}
+            <NextLink style={{alignSelf:'center'}}>
+              {isLoading ? 'Loading...' : <button>LOAD MORE</button>}
             </NextLink>
           </>
         )}
