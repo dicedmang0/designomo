@@ -89,11 +89,15 @@ function ProductsGrid({products}) {
  * @param {{
  *   product: ProductItemFragment;
  *   loading?: 'eager' | 'lazy';
+ * selectedVariant: ProductFragment['selectedVariant'];
  * }}
  */
 function ProductItem({product, loading}) {
   const variant = product.variants.nodes[0];
+  console.log(variant);
   const variantUrl = useVariantUrl(product.handle, variant.selectedOptions);
+  const hasCompareAtPrice = variant.compareAtPriceV2 && variant.priceV2.amount < variant.compareAtPriceV2.amount;
+  console.log(product)
   return (
     <Link
       className="product-item"
@@ -112,7 +116,12 @@ function ProductItem({product, loading}) {
       )}
       <h4 style={{textAlign: 'center', fontFamily:'Arial',textTransform:'uppercase'}}>{product.title}</h4>
       <small style={{textAlign:'center', fontFamily:'Arial', fontStyle:'italic'}}>
-        <Money data={product.priceRange.minVariantPrice} />
+      {hasCompareAtPrice && (
+          <span style={{ textDecoration: 'line-through', display:'flex', justifyContent:'center', marginBottom:'10px' }}>
+            <Money data={variant.compareAtPriceV2} />
+          </span>
+        )}
+        <Money style={{fontWeight:'700'}} data={variant.priceV2} />
       </small>
     </Link>
   );
@@ -122,6 +131,18 @@ const PRODUCT_ITEM_FRAGMENT = `#graphql
   fragment MoneyProductItem on MoneyV2 {
     amount
     currencyCode
+  }
+  fragment ProductVariant on ProductVariant {
+    selectedOptions {
+      name
+      value
+    }
+    compareAtPriceV2 {
+      ...MoneyProductItem
+    }
+    priceV2 {
+      ...MoneyProductItem
+    }
   }
   fragment ProductItem on Product {
     id
@@ -144,10 +165,7 @@ const PRODUCT_ITEM_FRAGMENT = `#graphql
     }
     variants(first: 1) {
       nodes {
-        selectedOptions {
-          name
-          value
-        }
+        ...ProductVariant
       }
     }
   }
@@ -190,7 +208,44 @@ const COLLECTION_QUERY = `#graphql
   }
 `;
 
+const PRODUCT_VARIANT_FRAGMENT = `#graphql
+  fragment ProductVariant on ProductVariant {
+    availableForSale
+    compareAtPrice {
+      amount
+      currencyCode
+    }
+    id
+    image {
+      id
+      url
+      altText
+      width
+      height
+    }
+    price {
+      amount
+      currencyCode
+    }
+    product {
+      title
+      handle
+    }
+    selectedOptions {
+      name
+      value
+    }
+    sku
+    title
+    unitPrice {
+      amount
+      currencyCode
+    }
+  }
+`;
+
 /** @typedef {import('@shopify/remix-oxygen').LoaderFunctionArgs} LoaderFunctionArgs */
 /** @template T @typedef {import('@remix-run/react').MetaFunction<T>} MetaFunction */
 /** @typedef {import('storefrontapi.generated').ProductItemFragment} ProductItemFragment */
 /** @typedef {import('@shopify/remix-oxygen').SerializeFrom<typeof loader>} LoaderReturnData */
+/** @typedef {import('storefrontapi.generated').ProductVariantFragment} ProductVariantFragment */
