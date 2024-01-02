@@ -12,6 +12,8 @@ import {
 import {getVariantUrl} from '~/utils';
 import chart from '../Assets/chart.png';
 import chart2 from '../Assets/sizechart.png'
+import { useCurrency } from '../contexts/CurrencyContext';
+
 /**
  * @type {MetaFunction<typeof loader>}
  */
@@ -106,23 +108,27 @@ function redirectToFirstVariant({product, request}) {
 
 export default function Product() {
   /** @type {LoaderReturnData} */
+  const { currency } = useCurrency();
   const  data = useLoaderData();
-  console.log('Data in Product:', data);
   if (!data) {
     return <div>Loading data or data is not available...</div>;
   }
   const { product, variants } = data;
-  console.log(data)
   const {selectedVariant, images} = product;
+  const imageNodes = images.edges.map(edge => edge.node);
+  console.log('this is:',selectedVariant);
   return (
     <div className="product">
-      <ProductImage images={images.edges.map(edge => edge.node)} />
+      <ProductImage 
+      selectedImage={selectedVariant.image} 
+      images={imageNodes} />
       <ProductMain
         selectedVariant={selectedVariant}
         product={product}
         variants={variants}
+        currency={currency}
       />
-        <RecommendedProducts products={data.recommendedProducts} />
+        <RecommendedProducts products={data.recommendedProducts} currency={currency} />
     </div>
   );
 }
@@ -131,9 +137,9 @@ export default function Product() {
  * @param {{images: ProductVariantFragment['image']}}
  * 
  */
-function ProductImage({images}) {
+function ProductImage({selectedImage, images}) {
   console.log(images);
-  const [selectedImage, setSelectedImage] = useState(images[0]);
+  // const [selectedImage, setSelectedImage] = useState(images[0]);
   const settings = {
     dots: true, // Show dot indicators
     infinite: true,
@@ -142,16 +148,19 @@ function ProductImage({images}) {
     slidesToScroll: 1,
     adaptiveHeight: true,
   };
+  const allImages = [selectedImage, ...images.filter(img => img.id !== selectedImage.id)];
+
+  // console.log('this is all imager',allImages)
   if (!images) {
     return <div className="product-image" />;
   }
   return (
     <div className="product-image-slider">
       <Slider {...settings}>
-        {images.map((image) => (
-          <div key={image.id}>
+        {allImages.map((image, index) => (
+          <div key={index}>
             <img
-              src={image.originalSrc}
+              src={image.url || image.originalSrc}
               alt={image.altText || 'Product Image'}
             />
           </div>
@@ -171,7 +180,7 @@ function ProductImage({images}) {
  * 
  * }}
  */
-function ProductMain({selectedVariant, product, variants}) {
+function ProductMain({selectedVariant, product, variants, currency}) {
   const [isOpen, setIsOpen] = useState(false);
   const [sizeOpen, setSizeOpen] = useState(false);
   const data = useLoaderData();
@@ -186,7 +195,7 @@ function ProductMain({selectedVariant, product, variants}) {
   return (
     <div className="product-main">
       <h1 style={{textTransform:'uppercase', margin:'0px'}}>{title}</h1>
-      <ProductPrice selectedVariant={selectedVariant} />
+      <ProductPrice selectedVariant={selectedVariant} currency={currency} />
       <br />
       <br />
       <VariantSelector
@@ -234,28 +243,39 @@ function ProductMain({selectedVariant, product, variants}) {
  *   selectedVariant: ProductFragment['selectedVariant'];
  * }}
  */
-function ProductPrice({selectedVariant}) {
+function ProductPrice({selectedVariant, currency}) {
+  const convertPrice = (price) => {
+    // Example conversion logic
+    const exchangeRate = currency === 'USD' ? 0.000068 : 1; // Use actual exchange rate
+    return price * exchangeRate;
+  };
   if (!selectedVariant) {
     return null; // Or some loading/fallback state
   }
-  const { compareAtPrice, price } = selectedVariant;
-  const isOnSale = compareAtPrice && price && compareAtPrice.amount > price.amount;
+  const convertedPrice = convertPrice(selectedVariant.price.amount, currency);
+  const convertedCompareAtPrice = selectedVariant.compareAtPrice 
+    ? convertPrice(selectedVariant.compareAtPrice.amount, currency) 
+    : null;
+
+  // const { compareAtPrice, price } = selectedVariant;
+  const isOnSale = convertedCompareAtPrice && convertedPrice && convertedCompareAtPrice > convertedPrice;
+
   console.log(selectedVariant);
   return (
     <div className="product-price">
-      {selectedVariant?.compareAtPrice ? (
+      {isOnSale ? (
         <>
           <div className="product-price-on-sale">
             <span style={{ textDecoration: 'line-through', marginRight: '10px' }}>
-              {selectedVariant ? <Money data={selectedVariant.compareAtPrice} /> : null}
+              {convertedCompareAtPrice.toFixed(2)} {currency}
             </span>
             <span>
-              {selectedVariant ? <Money data={selectedVariant.price} /> : null}
+              {convertedPrice.toFixed(2)} {currency}
             </span>
           </div>
         </>
       ) : (
-        selectedVariant?.price && <Money data={selectedVariant?.price} />
+        <span>{convertedPrice.toFixed(2)} {currency}</span>
       )}
     </div>
   );
@@ -374,10 +394,12 @@ function AddToCartButton({analytics, children, disabled, lines, onClick}) {
 *   products: Promise<RecommendedProductsQuery>;
 * }}
 */
-function RecommendedProducts({products}) {
-  // if (!products || !products.nodes || !Array.isArray(products.nodes)) {
-  //   return <div>No recommended products available</div>; // Return null or any fallback content if products or nodes are undefined
-  // }
+function RecommendedProducts({products, currency}) {
+  console.log('Recommended products:', products);
+  const convertPrice = (price) => {
+    const exchangeRate = currency === 'USD' ? 0.000068 : 1; // Replace with actual exchange rate
+    return price * exchangeRate;
+  };
  return (
    <div className="recommended-products">
      <h2>Related Products</h2>
@@ -385,23 +407,28 @@ function RecommendedProducts({products}) {
        <Await resolve={products}>
          {({products}) => (
            <div className="recommended-products-grid">
-             {products.nodes.map((product) => (
-               <Link
-                 key={product.id}
-                 className="recommended-product"
-                 to={`/products/${product.handle}`}
-               >
-                 <Image
-                   data={product.images.nodes[0]}
-                   aspectRatio="1/1"
-                   sizes="(min-width: 45em) 20vw, 50vw"
-                 />
-                 <h4 style={{textTransform:'uppercase'}}>{product.title}</h4>
-                 <small>
-                   <Money data={product.priceRange.minVariantPrice} />
-                 </small>
-               </Link>
-             ))}
+             {products.nodes.map((product) => {
+              const convertedPrice = convertPrice(product.priceRange.minVariantPrice.amount);
+              
+              return (
+                <Link
+                  key={product.id}
+                  className="recommended-product"
+                  to={`/products/${product.handle}`}
+                >
+                  <Image
+                    data={product.images.nodes[0]}
+                    aspectRatio="1/1"
+                    sizes="(min-width: 45em) 20vw, 50vw"
+                  />
+                  <h4 style={{textTransform:'uppercase'}}>{product.title}</h4>
+                  
+                  <small>{convertedPrice.toFixed(2)} {currency}</small>
+                  
+                </Link>
+              )
+             }
+             )}
            </div>
          )}
        </Await>

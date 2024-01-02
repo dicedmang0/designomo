@@ -20,6 +20,7 @@ import carouselStyles from 'react-responsive-carousel/lib/styles/carousel.min.cs
 import SlickCarousel from 'slick-carousel/slick/slick.css';
 import SlickCarouselTheme from 'slick-carousel/slick/slick-theme.css';
 import { useEffect } from 'react';
+import {CurrencyProvider} from './contexts/CurrencyContext';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 /**
@@ -141,9 +142,11 @@ export default function App() {
         <Links />
       </head>
       <body>
+        <CurrencyProvider>
         <Layout {...data}>
           <Outlet />
         </Layout>
+        </CurrencyProvider>
         <ScrollRestoration nonce={nonce} />
         <Scripts nonce={nonce} />
         <LiveReload nonce={nonce} />

@@ -27,20 +27,34 @@ LookBook Detail
   letter-spacing: -8.32px;
 }
 .slick-slide{
-  max-width: 400px;
+  max-width: 550px;
   float: inline-start;
 }
-.slick-prev{
-  color: black ;
+.Currency-Button{
+  position: absolute;
+  right: 10%;
+  top: 12%;
+  padding: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: Arial;
+    font-weight: 700;
+    background-color: transparent;
+    border: 1px solid black;
+    color: black;
+    border-radius: 0px;
 }
-.slick-next{
-  color: black;
-}
-.slick-next::before{
+.slick-prev:before,
+.slick-next:before{
   font-size: 45px;
   line-height: 2;
   opacity: 1;
-  color: black;
+  color: black !important;
+}
+.slick-track{
+  display: flex !important;
+  align-items: center !important;
 }
 
 
@@ -136,6 +150,14 @@ aside li {
 .recommended-products{
   grid-column: 1 / -1;
   margin-top: 80px;
+}
+.recommended-product{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.recommended-product h4{
+  text-align: center;
 }
 .account-recover{
   padding: 190px;
@@ -1036,12 +1058,11 @@ max-width: 461px;
 }
 
 .product-image-slider{
-  max-width: 500px;
-  max-height: 600px;
+  max-width: 600px;
+  max-height: 700px;
 }
 
-.product-image-slider .slick-slide {
-  display: flex;
+.product-image-slider.slick-slide {
   justify-content: center; /* Center horizontally */
   align-items: center;     /* Center vertically */
   min-height: 600px;        /* Adjust the height as needed */
@@ -1084,7 +1105,8 @@ max-width: 461px;
   width: 100%;
 }
 .slick-list{
-  max-height: 600px;
+  max-height: 700px;
+  min-height: 700px;
 }
 
 /*
@@ -1099,6 +1121,18 @@ max-width: 461px;
 
 .account-logout {
   display: inline-block;
+}
+#floatingButton {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  mix-blend-mode: difference;
+  background: transparent url('../Assets/WA.png') no-repeat center;
+  border: 0px;
+  /* Set width and height to fit your background image */
+  width: 100px;  /* Example size */
+  height: 100px; /* Example size */
+  z-index: 1;
 }
 
 
@@ -1281,14 +1315,25 @@ max-width: 461px;
     min-width: 100vw;
     max-width: 100%;
   }
-  .slick-next::before{
+  .slick-next:before{
     font-size: 45px;
     line-height: 2;
     opacity: 1;
-    color: black;
+    color: black !important;
   }
   .slick-prev{
-    opacity: 0;
+    left: -10px !important;
+    z-index: 1;
+  }
+  .Currency-Button{
+    right: 26%;
+    top: 36%;
+    font-size: 11.4px;
+    padding: 2px 0px;
+    z-index: 1;
+  }
+  .slick-next{
+    right: -10px !important;
   }
   .Lookbook-Title{
     max-width: 300px;
@@ -1317,10 +1362,10 @@ max-width: 461px;
   }
   .slick-list{
     max-height: 450px;
+    min-height: 450px;
   }
   
   .product-image-slider .slick-slide {
-    display: flex;
     justify-content: center; /* Center horizontally */
     align-items: center;     /* Center vertically */
     min-height: 450px;        /* Adjust the height as needed */

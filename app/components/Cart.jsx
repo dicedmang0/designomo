@@ -2,11 +2,12 @@ import {CartForm, Image, Money} from '@shopify/hydrogen';
 import {Link} from '@remix-run/react';
 import {useVariantUrl} from '~/utils';
 import Rbtn from '../Assets/removebtn.png';
+import {useCurrency} from '../contexts/CurrencyContext'
 
 /**
  * @param {CartMainProps}
  */
-export function CartMain({layout, cart}) {
+export function CartMain({layout, cart, currency}) {
   const linesCount = Boolean(cart?.lines?.nodes?.length || 0);
   const withDiscount =
     cart &&
@@ -16,7 +17,7 @@ export function CartMain({layout, cart}) {
   return (
     <div className={className}>
       <CartEmpty hidden={linesCount} layout={layout} />
-      <CartDetails cart={cart} layout={layout} />
+      <CartDetails cart={cart} layout={layout} currency={currency} />
     </div>
   );
 }
@@ -24,14 +25,14 @@ export function CartMain({layout, cart}) {
 /**
  * @param {CartMainProps}
  */
-function CartDetails({layout, cart}) {
+function CartDetails({layout, cart, currency}) {
   const cartHasItems = !!cart && cart.totalQuantity > 0;
 
   return (
     <div className="cart-details">
-      <CartLines lines={cart?.lines} layout={layout} />
+      <CartLines lines={cart?.lines} layout={layout} currency={currency} />
       {cartHasItems && (
-        <CartSummary cost={cart.cost} layout={layout}>
+        <CartSummary cost={cart.cost} currency={currency} layout={layout}>
           <CartDiscounts discountCodes={cart.discountCodes} />
           <CartCheckoutActions checkoutUrl={cart.checkoutUrl} />
         </CartSummary>
@@ -46,14 +47,14 @@ function CartDetails({layout, cart}) {
  *   lines: CartApiQueryFragment['lines'] | undefined;
  * }}
  */
-function CartLines({lines, layout}) {
+function CartLines({lines, layout, currency}) {
   if (!lines) return null;
 
   return (
     <div aria-labelledby="cart-lines">
       <ul>
         {lines.nodes.map((line) => (
-          <CartLineItem key={line.id} line={line} layout={layout} />
+          <CartLineItem key={line.id} line={line} layout={layout} currency={currency} />
         ))}
       </ul>
     </div>
@@ -66,10 +67,11 @@ function CartLines({lines, layout}) {
  *   line: CartLine;
  * }}
  */
-function CartLineItem({layout, line}) {
+function CartLineItem({layout, line, currency}) {
   const {id, merchandise} = line;
   const {product, title, image, selectedOptions} = merchandise;
   const lineItemUrl = useVariantUrl(product.handle, selectedOptions);
+  console.log('Currency in CartLine:',currency);
 
   return (
     <li key={id} className="cart-line">
@@ -100,7 +102,7 @@ function CartLineItem({layout, line}) {
             <strong>{product.title}</strong>
           </p>
         </Link>
-        <CartLinePrice line={line} as="span" />
+        <CartLinePrice line={line} as="span" currency={currency} />
         </div>
 
         <ul style={{fontSize:'13px',fontWeight:'500',maxWidth:'95px'}}>
@@ -144,19 +146,23 @@ function CartCheckoutActions({checkoutUrl}) {
  * }}
  */
 export function CartSummary({cost, layout, children = null}) {
+  const { currency } = useCurrency();
   const className =
     layout === 'page' ? 'cart-summary-page' : 'cart-summary-aside';
-
+    const convertPrice = (amount, currency) => {
+      // Example conversion logic (you'll need to replace this with real logic)
+      const exchangeRate = currency === 'USD' ? 0.000068 : 1; // Replace with actual exchange rate
+      return amount * exchangeRate;
+    };
+    const convertedSubtotal = cost?.subtotalAmount?.amount
+    ? convertPrice(cost.subtotalAmount.amount, currency)
+    : null;
   return (
     <div aria-labelledby="cart-summary" className={className}>
       <dl className="cart-subtotal">
         <strong style={{fontSize:'14px'}}>TOTAL</strong>
         <strong style={{fontSize:'14px', fontStyle:'italic',letterSpacing:'-0.715px'}}>
-          {cost?.subtotalAmount?.amount ? (
-            <Money data={cost?.subtotalAmount} />
-          ) : (
-            '-'
-          )}
+        {convertedSubtotal ? `${currency} ${convertedSubtotal.toFixed(2)}` : '-'}
         </strong>
       </dl>
       <dl style={{display:'flex',justifyContent:'space-between',fontSize:'14px'}} >
@@ -234,7 +240,7 @@ function CartLineQuantity({line}) {
  *   [key: string]: any;
  * }}
  */
-function CartLinePrice({line, priceType = 'regular', ...passthroughProps}) {
+function CartLinePrice({line, priceType = 'regular', currency, ...passthroughProps}) {
   if (!line?.cost?.amountPerQuantity || !line?.cost?.totalAmount) return null;
 
   const moneyV2 =
@@ -246,9 +252,21 @@ function CartLinePrice({line, priceType = 'regular', ...passthroughProps}) {
     return null;
   }
 
+  const convertPrice = (price) => {
+    // Replace with your currency conversion logic
+    const exchangeRate = currency === 'USD' ? 0.000068 : 1;
+    return price * exchangeRate;
+  };
+  const priceValue = convertPrice(moneyV2.amount);
+  console.log('Currency in Cart:',currency);
+
+  
+
   return (
     <div style={{fontStyle:'italic', fontFamily:'Arial',fontWeight:'500', letterSpacing:'-0.715px'}}>
-      <Money withoutTrailingZeros {...passthroughProps} data={moneyV2} />
+     <small>
+     {priceValue.toFixed(2)} {currency} 
+     </small>
     </div>
   );
 }

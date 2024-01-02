@@ -5,6 +5,8 @@ import SearchLogo from "../Assets/Search-ico.png";
 import LoginLogo from "../Assets/account.png";
 import CartLogo from "../Assets/cart.png"
 import BackButton from "./BackButton";
+import {useCurrency} from '../contexts/CurrencyContext'
+import WaButton from '../Assets/WA.png';
 
 
 /**
@@ -14,6 +16,11 @@ export function Header({header, isLoggedIn, cart}) {
   const isBrowser = typeof window !== 'undefined';
   const [windowWidth, setWindowWidth] = useState(isBrowser ? window.innerWidth : 0);
   const {shop, menu} = header;
+  const { currency, setCurrency } = useCurrency();
+
+  const handleCurrencyChange = (e) => {
+    setCurrency(e.target.value);
+  };
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
@@ -33,6 +40,10 @@ export function Header({header, isLoggedIn, cart}) {
           <nav className="header-ctas" role="navigation">
       <HeaderMenuMobileToggle />
       <SearchToggle />
+      <select className='Currency-Button' onChange={handleCurrencyChange} value={currency}>
+        <option value="IDR">IDR</option>
+        <option value="USD">USD</option>
+      </select>
       
       <NavLink prefetch="intent" to="/" style={{width:'50%', display: 'flex', justifyContent:'center',flexWrap:'wrap',alignSelf:'flex-start', position:'relative'}} end>
           <img className='Header-logo' src={shop.brand.logo.image.url} />
@@ -42,6 +53,7 @@ export function Header({header, isLoggedIn, cart}) {
       <NavLink prefetch="intent" to="/account" style={activeLinkStyle}>
         {isLoggedIn ? 'Account' : <img src={LoginLogo} />}
       </NavLink>
+      <a href='https://wa.link/x0l5py' id="floatingButton"></a>
       </div>
     </nav>
 
@@ -59,6 +71,11 @@ export function Header({header, isLoggedIn, cart}) {
         <NavLink prefetch="intent" to="/" style={{width:'50%', display: 'flex', justifyContent:'center',flexWrap:'wrap',alignSelf:'flex-start',position:'relative'}} end>
           <img className='Header-logo'  src={shop.brand.logo.image.url} />
         </NavLink>
+        <select className='Currency-Button' onChange={handleCurrencyChange} value={currency}>
+        <option value="IDR">IDR</option>
+        <option value="USD">USD</option>
+      </select>
+      <a href='https://wa.link/x0l5py' id="floatingButton"></a>
         <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} />
         </div>
       )}

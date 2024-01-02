@@ -7,6 +7,7 @@ import {
   Money,
 } from '@shopify/hydrogen';
 import {useVariantUrl} from '~/utils';
+import { useCurrency} from '../contexts/CurrencyContext'
 
 /**
  * @type {MetaFunction<typeof loader>}
@@ -44,7 +45,8 @@ export async function loader({request, params, context}) {
 export default function Collection() {
   /** @type {LoaderReturnData} */
   const {collection} = useLoaderData();
-
+  const { currency } = useCurrency();
+  console.log(currency);
   return (
     <div className="collection">
       <p className="collection-description">{collection.description}</p>
@@ -54,7 +56,7 @@ export default function Collection() {
             <PreviousLink style={{alignSelf:'center'}}>
               {isLoading ? 'Loading...' : <button>LOAD PREVIOUS</button>}
             </PreviousLink>
-            <ProductsGrid products={nodes} />
+            <ProductsGrid products={nodes} currency={currency} />
             <br />
             <NextLink style={{alignSelf:'center'}}>
               {isLoading ? 'Loading...' : <button>LOAD MORE</button>}
@@ -69,7 +71,7 @@ export default function Collection() {
 /**
  * @param {{products: ProductItemFragment[]}}
  */
-function ProductsGrid({products}) {
+function ProductsGrid({products, currency}) {
   return (
     <div className="products-grid">
       {products.map((product, index) => {
@@ -78,6 +80,7 @@ function ProductsGrid({products}) {
             key={product.id}
             product={product}
             loading={index < 8 ? 'eager' : undefined}
+            currency={currency}
           />
         );
       })}
@@ -92,12 +95,20 @@ function ProductsGrid({products}) {
  * selectedVariant: ProductFragment['selectedVariant'];
  * }}
  */
-function ProductItem({product, loading}) {
+function ProductItem({product, loading, currency}) {
   const variant = product.variants.nodes[0];
-  console.log(variant);
+
   const variantUrl = useVariantUrl(product.handle, variant.selectedOptions);
   const hasCompareAtPrice = variant.compareAtPriceV2 && variant.priceV2.amount < variant.compareAtPriceV2.amount;
-  console.log(product)
+
+  const convertPrice = (price, currency) => {
+    // Replace this with actual conversion logic
+    const exchangeRate = currency === 'USD' ? 0.000068 : 1; // Example rate
+    return price * exchangeRate;
+  };
+
+  const displayPrice = convertPrice(variant.priceV2.amount, currency);
+  const displayCompareAtPrice = hasCompareAtPrice ? convertPrice(variant.compareAtPriceV2.amount, currency) : null;
   return (
     <Link
       className="product-item"
@@ -115,13 +126,15 @@ function ProductItem({product, loading}) {
         />
       )}
       <h4 style={{textAlign: 'center', fontFamily:'Arial',textTransform:'uppercase'}}>{product.title}</h4>
-      <small style={{textAlign:'center', fontFamily:'Arial', fontStyle:'italic'}}>
+      <small style={{textAlign:'center', fontFamily:'Arial', fontStyle:'italic',display:'flex', flexDirection:'column'}}>
       {hasCompareAtPrice && (
           <span style={{ textDecoration: 'line-through', display:'flex', justifyContent:'center', marginBottom:'10px' }}>
-            <Money data={variant.compareAtPriceV2} />
+            {displayCompareAtPrice.toFixed(2)} {currency}
           </span>
         )}
-        <Money style={{fontWeight:'700'}} data={variant.priceV2} />
+        <span style={{fontWeight:'700', fontSize:'14px'}}>
+        {displayPrice.toFixed(2)} {currency}
+        </span>
       </small>
     </Link>
   );
