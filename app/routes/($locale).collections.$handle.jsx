@@ -100,15 +100,26 @@ function ProductItem({product, loading, currency}) {
 
   const variantUrl = useVariantUrl(product.handle, variant.selectedOptions);
   const hasCompareAtPrice = variant.compareAtPriceV2 && variant.priceV2.amount < variant.compareAtPriceV2.amount;
-
-  const convertPrice = (price, currency) => {
-    // Replace this with actual conversion logic
+  
+  const convertPrice = (price) => {
     const exchangeRate = currency === 'USD' ? 0.000068 : 1; // Example rate
     return price * exchangeRate;
   };
+  
+  const formatCurrency = (amount, currency) => {
+    if (currency === 'USD') {
+      return amount.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+    } else {
+      // For IDR, manually add the 'IDR' code and format with dot separators
+      return `IDR ${amount.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
+    }
+  };
 
-  const displayPrice = convertPrice(variant.priceV2.amount, currency);
-  const displayCompareAtPrice = hasCompareAtPrice ? convertPrice(variant.compareAtPriceV2.amount, currency) : null;
+
+  const displayPrice = formatCurrency(convertPrice(variant.priceV2.amount), currency);
+  const displayCompareAtPrice = hasCompareAtPrice 
+    ? formatCurrency(convertPrice(variant.compareAtPriceV2.amount), currency) 
+    : null;
   return (
     <Link
       className="product-item"
@@ -129,11 +140,11 @@ function ProductItem({product, loading, currency}) {
       <small style={{textAlign:'center', fontFamily:'Arial', fontStyle:'italic',display:'flex', flexDirection:'column'}}>
       {hasCompareAtPrice && (
           <span style={{ textDecoration: 'line-through', display:'flex', justifyContent:'center', marginBottom:'10px' }}>
-            {displayCompareAtPrice.toFixed(2)} {currency}
+             {displayCompareAtPrice}
           </span>
         )}
         <span style={{fontWeight:'700', fontSize:'14px'}}>
-        {displayPrice.toFixed(2)} {currency}
+        {displayPrice}
         </span>
       </small>
     </Link>

@@ -149,20 +149,30 @@ export function CartSummary({cost, layout, children = null}) {
   const { currency } = useCurrency();
   const className =
     layout === 'page' ? 'cart-summary-page' : 'cart-summary-aside';
-    const convertPrice = (amount, currency) => {
+    const convertPrice = (amount) => {
       // Example conversion logic (you'll need to replace this with real logic)
       const exchangeRate = currency === 'USD' ? 0.000068 : 1; // Replace with actual exchange rate
       return amount * exchangeRate;
     };
+
+    const formatCurrency = (amount, currency) => {
+      if (currency === 'USD') {
+        return amount.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+      } else {
+        // For IDR, manually add the 'IDR' code and format with dot separators
+        return `IDR ${amount.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`;
+      }
+    };
+
     const convertedSubtotal = cost?.subtotalAmount?.amount
-    ? convertPrice(cost.subtotalAmount.amount, currency)
+    ? formatCurrency(convertPrice(cost.subtotalAmount.amount), currency)
     : null;
   return (
     <div aria-labelledby="cart-summary" className={className}>
       <dl className="cart-subtotal">
         <strong style={{fontSize:'14px'}}>TOTAL</strong>
         <strong style={{fontSize:'14px', fontStyle:'italic',letterSpacing:'-0.715px'}}>
-        {convertedSubtotal ? `${currency} ${convertedSubtotal.toFixed(2)}` : '-'}
+        {convertedSubtotal || '-'}
         </strong>
       </dl>
       <dl style={{display:'flex',justifyContent:'space-between',fontSize:'14px'}} >
@@ -257,15 +267,21 @@ function CartLinePrice({line, priceType = 'regular', currency, ...passthroughPro
     const exchangeRate = currency === 'USD' ? 0.000068 : 1;
     return price * exchangeRate;
   };
-  const priceValue = convertPrice(moneyV2.amount);
-  console.log('Currency in Cart:',currency);
 
-  
+  const formatCurrency = (amount, currency) => {
+    if (currency === 'USD') {
+      return amount.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+    } else {
+      return `IDR ${amount.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`;
+    }
+  };
+
+  const priceValue = formatCurrency(convertPrice(moneyV2.amount), currency);
 
   return (
     <div style={{fontStyle:'italic', fontFamily:'Arial',fontWeight:'500', letterSpacing:'-0.715px'}}>
      <small>
-     {priceValue.toFixed(2)} {currency} 
+     {priceValue}
      </small>
     </div>
   );

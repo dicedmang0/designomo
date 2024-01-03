@@ -249,15 +249,22 @@ function ProductPrice({selectedVariant, currency}) {
     const exchangeRate = currency === 'USD' ? 0.000068 : 1; // Use actual exchange rate
     return price * exchangeRate;
   };
+  const formatCurrency = (amount, currency) => {
+    if (currency === 'USD') {
+      return amount.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+    } else {
+      // For IDR, manually add the 'IDR' code and format with dot separators
+      return `IDR ${amount.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`;
+    }
+  };
   if (!selectedVariant) {
     return null; // Or some loading/fallback state
   }
-  const convertedPrice = convertPrice(selectedVariant.price.amount, currency);
+  const convertedPrice = convertPrice(selectedVariant.price.amount);
   const convertedCompareAtPrice = selectedVariant.compareAtPrice 
-    ? convertPrice(selectedVariant.compareAtPrice.amount, currency) 
+    ? convertPrice(selectedVariant.compareAtPrice.amount) 
     : null;
 
-  // const { compareAtPrice, price } = selectedVariant;
   const isOnSale = convertedCompareAtPrice && convertedPrice && convertedCompareAtPrice > convertedPrice;
 
   console.log(selectedVariant);
@@ -267,15 +274,15 @@ function ProductPrice({selectedVariant, currency}) {
         <>
           <div className="product-price-on-sale">
             <span style={{ textDecoration: 'line-through', marginRight: '10px' }}>
-              {convertedCompareAtPrice.toFixed(2)} {currency}
+            {formatCurrency(convertedCompareAtPrice, currency)}
             </span>
             <span>
-              {convertedPrice.toFixed(2)} {currency}
+            {formatCurrency(convertedPrice, currency)}
             </span>
           </div>
         </>
       ) : (
-        <span>{convertedPrice.toFixed(2)} {currency}</span>
+        <span>{formatCurrency(convertedPrice, currency)}</span>
       )}
     </div>
   );
