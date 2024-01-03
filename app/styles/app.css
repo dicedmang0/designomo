@@ -292,7 +292,7 @@ aside li {
   background-color: var(--color-light);
   margin-top: auto;
   color: var(--color-dark);
-  z-index: 1;
+  z-index: 0;
 }
 .copyright{
   display: flex;
@@ -1130,9 +1130,10 @@ max-width: 461px;
   background: transparent url('../Assets/WA.png') no-repeat center;
   border: 0px;
   /* Set width and height to fit your background image */
-  width: 100px;  /* Example size */
-  height: 100px; /* Example size */
+  width: 70px;  /* Example size */
+  height: 70px; /* Example size */
   z-index: 1;
+  background-size: cover;
 }
 
 
@@ -1150,6 +1151,11 @@ max-width: 461px;
   }
   .product{
     padding: 100px 20px;
+  }
+  #floatingButton{
+    width: 50px;
+    height: 50px;
+
   }
   .About-section-2{
     margin-top: 0px;
