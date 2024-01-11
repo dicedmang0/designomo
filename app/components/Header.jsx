@@ -1,5 +1,5 @@
 import {Await, NavLink} from '@remix-run/react';
-import {Suspense,useState, useEffect} from 'react';
+import {Suspense,useState, useEffect, } from 'react';
 import {useRootLoaderData} from '~/root';
 import SearchLogo from "../Assets/Search-ico.png";
 import LoginLogo from "../Assets/account.png";
@@ -7,7 +7,10 @@ import CartLogo from "../Assets/cart.png"
 import BackButton from "./BackButton";
 import {useCurrency} from '../contexts/CurrencyContext'
 import WaButton from '../Assets/WA.png';
-
+import { useNavigate } from '@remix-run/react';
+import USD from '../Assets/currency-flags.webp';
+import IDR from '../Assets/indonesia.png';
+import CurrencyButton from '../components/CurrencyButton';
 
 /**
  * @param {HeaderProps}
@@ -40,10 +43,7 @@ export function Header({header, isLoggedIn, cart}) {
           <nav className="header-ctas" role="navigation">
       <HeaderMenuMobileToggle />
       <SearchToggle />
-      <select className='Currency-Button' onChange={handleCurrencyChange} value={currency}>
-        <option value="IDR">IDR</option>
-        <option value="USD">USD</option>
-      </select>
+      <CurrencyButton currency={currency} setCurrency={setCurrency} />
       
       <NavLink prefetch="intent" to="/" style={{width:'50%', display: 'flex', justifyContent:'center',flexWrap:'wrap',alignSelf:'flex-start', position:'relative'}} end>
           <img className='Header-logo' src={shop.brand.logo.image.url} />
@@ -53,7 +53,7 @@ export function Header({header, isLoggedIn, cart}) {
       <NavLink prefetch="intent" to="/account" style={activeLinkStyle}>
         {isLoggedIn ? 'Account' : <img src={LoginLogo} />}
       </NavLink>
-      <a href='https://wa.link/x0l5py' id="floatingButton"></a>
+      <a href='https://wa.link/y5v5qz' id="floatingButton"></a>
       </div>
     </nav>
 
@@ -71,10 +71,7 @@ export function Header({header, isLoggedIn, cart}) {
         <NavLink prefetch="intent" to="/" style={{width:'50%', display: 'flex', justifyContent:'center',flexWrap:'wrap',alignSelf:'flex-start',position:'relative'}} end>
           <img className='Header-logo'  src={shop.brand.logo.image.url} />
         </NavLink>
-        <select className='Currency-Button' onChange={handleCurrencyChange} value={currency}>
-        <option value="IDR">IDR</option>
-        <option value="USD">USD</option>
-      </select>
+        <CurrencyButton currency={currency} setCurrency={setCurrency} />
       <a href='https://wa.link/x0l5py' id="floatingButton"></a>
         <HeaderCtas isLoggedIn={isLoggedIn} cart={cart} />
         </div>
@@ -107,9 +104,10 @@ export function HeaderMenu({menu, primaryDomainUrl, viewport}) {
   const className = `header-menu-${viewport}`;
 
   function closeAside(event) {
+    let navigate = useNavigate();
     if (viewport === 'mobile') {
       event.preventDefault();
-      window.location.href = event.currentTarget.href;
+      navigate(event.currentTarget.getAttribute('href'));
     }
     setOpenDropdown(null)
   }
@@ -137,7 +135,12 @@ export function HeaderMenu({menu, primaryDomainUrl, viewport}) {
         : item.url;
 
     const hasSubmenu = item.items && item.items.length > 0;
-
+    const isSaleItem = item.title.toUpperCase() === 'SALE';
+        const linkStyle = {
+          ...activeLinkStyle,
+          color: isSaleItem ? 'red' : 'black', // Red color for SALE, black for others
+        };
+    console.log(menu)
     return (
       <div key={item.id}>
             {hasSubmenu ? (
@@ -171,7 +174,7 @@ export function HeaderMenu({menu, primaryDomainUrl, viewport}) {
                 key={item.id}
                 onClick={closeAside}
                 prefetch="intent"
-                style={activeLinkStyle}
+                style={linkStyle}
                 to={url}
               >
                 {item.title}

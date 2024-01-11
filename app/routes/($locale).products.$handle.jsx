@@ -1,4 +1,4 @@
-import {Suspense,useState} from 'react';
+import {Suspense,useState, useRef, useEffect} from 'react';
 import {defer, redirect} from '@shopify/remix-oxygen';
 import {Await, Link, useLoaderData} from '@remix-run/react';
 import Slider from "react-slick";
@@ -138,15 +138,41 @@ export default function Product() {
  * 
  */
 function ProductImage({selectedImage, images}) {
-  console.log(images);
+  const sliderRef = useRef(null);
   // const [selectedImage, setSelectedImage] = useState(images[0]);
+  useEffect(() => {
+    const slider = sliderRef.current;
+    if (slider) {
+      const handleWheel = (e) => {
+        e.preventDefault();
+        if (e.deltaY > 0) {
+          slider.slickNext();
+        } else {
+          slider.slickPrev();
+        }
+      };
+
+      // Add event listener
+      const sliderNode = slider.innerSlider && slider.innerSlider.list;
+      if (sliderNode) {
+        sliderNode.addEventListener('wheel', handleWheel, { passive: false });
+      }
+
+      // Clean up
+      return () => {
+        if (sliderNode) {
+          sliderNode.removeEventListener('wheel', handleWheel);
+        }
+      };
+    }
+  }, []);
   const settings = {
     dots: true, // Show dot indicators
     infinite: true,
-    speed: 500,
+    speed: 2500,
     slidesToShow: 1,
     slidesToScroll: 1,
-    adaptiveHeight: true,
+    adaptiveHeight: false,
   };
   const allImages = [selectedImage, ...images.filter(img => img.id !== selectedImage.id)];
 
@@ -156,7 +182,7 @@ function ProductImage({selectedImage, images}) {
   }
   return (
     <div className="product-image-slider">
-      <Slider {...settings}>
+      <Slider ref={sliderRef} {...settings}>
         {allImages.map((image, index) => (
           <div key={index}>
             <img
@@ -276,7 +302,7 @@ function ProductPrice({selectedVariant, currency}) {
             <span style={{ textDecoration: 'line-through', marginRight: '10px' }}>
             {formatCurrency(convertedCompareAtPrice, currency)}
             </span>
-            <span>
+            <span style={{color:'red'}}>
             {formatCurrency(convertedPrice, currency)}
             </span>
           </div>
@@ -402,7 +428,14 @@ function AddToCartButton({analytics, children, disabled, lines, onClick}) {
 * }}
 */
 function RecommendedProducts({products, currency}) {
-  console.log('Recommended products:', products);
+  const formatCurrency = (amount, currency) => {
+    if (currency === 'USD') {
+      return amount.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+    } else {
+      // For IDR, manually add the 'IDR' code and format with dot separators
+      return `IDR ${amount.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`;
+    }
+  };
   const convertPrice = (price) => {
     const exchangeRate = currency === 'USD' ? 0.000068 : 1; // Replace with actual exchange rate
     return price * exchangeRate;
@@ -415,7 +448,7 @@ function RecommendedProducts({products, currency}) {
          {({products}) => (
            <div className="recommended-products-grid">
              {products.nodes.map((product) => {
-              const convertedPrice = convertPrice(product.priceRange.minVariantPrice.amount);
+              const convertedPrice = formatCurrency(convertPrice(product.priceRange.minVariantPrice.amount), currency);
               
               return (
                 <Link
@@ -430,7 +463,7 @@ function RecommendedProducts({products, currency}) {
                   />
                   <h4 style={{textTransform:'uppercase'}}>{product.title}</h4>
                   
-                  <small>{convertedPrice.toFixed(2)} {currency}</small>
+                  <small>{convertedPrice}</small>
                   
                 </Link>
               )

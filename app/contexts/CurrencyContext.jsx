@@ -4,7 +4,6 @@ const CurrencyContext = createContext(null);
 
 export const CurrencyProvider = ({ children }) => {
   const [currency, setCurrency] = useState('IDR');
-  console.log('Currency in Provider:', currency);
   return (
     <CurrencyContext.Provider value={{ currency, setCurrency }}>
       {children}

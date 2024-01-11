@@ -22,6 +22,7 @@ import OmoW from '../components/OmoWorld';
 import FleetingThreads from '../components/FleetingThreads';
 import ContactUs from '../components/Contactus';
 import ReturnPolicy from '../components/Returnpolicy';
+import Shippingpolicy from '../components/Shippingpolicy';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import Tinyomo from '../Assets/tinylogo.png';
 /**
@@ -238,6 +239,8 @@ export default function Page() {
         <ContactUs/>
       ): page.title === 'Return-Policy' ?(
         <ReturnPolicy/>
+      ): page.title === 'Shipping-Policy' ?(
+        <Shippingpolicy/>
       ):(
         <main dangerouslySetInnerHTML={{__html: page.body}} />
       )}

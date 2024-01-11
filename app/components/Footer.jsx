@@ -63,6 +63,9 @@ export function Footer({menu, shop}) {
             <Link to="/pages/contact-us">
               <p>CONTACT US</p>
             </Link>
+            <Link to="/pages/shipping-policy">
+              <p>SHIPPING POLICY</p>
+            </Link>
         </div>
         <div className="Footer-Right-Content">
           <div className="Footer-Middle">
@@ -85,6 +88,9 @@ export function Footer({menu, shop}) {
             </Link>
             <Link to="/pages/contact-us">
               <p>CONTACT US</p>
+            </Link>
+            <Link to="/pages/shipping-policy">
+              <p>SHIPPING POLICY</p>
             </Link>
         </div>
         <div>

@@ -139,7 +139,7 @@ function ProductItem({product, loading, currency}) {
       <h4 style={{textAlign: 'center', fontFamily:'Arial',textTransform:'uppercase'}}>{product.title}</h4>
       <small style={{textAlign:'center', fontFamily:'Arial', fontStyle:'italic',display:'flex', flexDirection:'column'}}>
       {hasCompareAtPrice && (
-          <span style={{ textDecoration: 'line-through', display:'flex', justifyContent:'center', marginBottom:'10px' }}>
+          <span style={{ textDecoration: 'line-through', display:'flex', justifyContent:'center', marginBottom:'10px'}}>
              {displayCompareAtPrice}
           </span>
         )}
