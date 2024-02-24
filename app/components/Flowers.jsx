@@ -57,11 +57,11 @@ function Flowers() {
   const settings = {
     dots: false,
     infinite: true,
-    speed: 3000,
+    speed: 1500,
     slidesToShow: 4,
     slidesToScroll: 1,
     autoplay: false,
-    autoplaySpeed: 3000,
+    autoplaySpeed: 1500,
     arrows: false, // Show navigation arrows
     prevArrow: <button className="slick-prev">Previous</button>,
     nextArrow: <button className="slick-next">Next</button>,

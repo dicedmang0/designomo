@@ -1,7 +1,4 @@
-import React from 'react';
-import SC1 from '../Assets/Summer-Capsule.png';
-import SC2 from '../Assets/Summer-Capsule-3.png';
-import SC3 from '../Assets/Summer-Capsule-2.png';
+import React, { useRef, useEffect} from 'react';
 import LNC1 from '../Assets/Look/LNC-1.png';
 import LNC2 from '../Assets/Look/LNC-2.png';
 import LNC3 from '../Assets/Look/LNC-3.png';
@@ -25,14 +22,43 @@ import LNC20 from '../Assets/Look/LNC-20.png';
 import Slider from 'react-slick';
 
 function Look() {
+  const sliderRef = useRef();
+  // Function to handle scroll
+  useEffect(() => {
+    // Function to handle scroll
+    const handleScroll = (e) => {
+      e.preventDefault();
+      if (e.deltaY < 0) {
+        // Scroll up
+        sliderRef.current.slickPrev();
+      } else {
+        // Scroll down
+        sliderRef.current.slickNext();
+      }
+    };
+
+    // Get the slider's DOM node
+    const slider = sliderRef.current;
+    const sliderNode = slider && slider.innerSlider && slider.innerSlider.list;
+
+    if (sliderNode) {
+      sliderNode.addEventListener('wheel', handleScroll, { passive: false });
+    }
+
+    return () => {
+      if (sliderNode) {
+        sliderNode.removeEventListener('wheel', handleScroll);
+      }
+    };
+  }, []);
   const settings = {
     dots: false,
     infinite: true,
-    speed: 500,
+    speed: 1500,
     slidesToShow: 3,
     slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 3000,
+    autoplay: false,
+    autoplaySpeed: 1500,
     arrows: false, // Show navigation arrows
     prevArrow: <button className="slick-prev">Previous</button>,
     nextArrow: <button className="slick-next">Next</button>,
@@ -48,7 +74,7 @@ function Look() {
   return (
     <div className='Summer-Capsule-Container'>
         <div className='Lookbook-Image-Carouesel'>
-        <Slider {...settings}>
+        <Slider ref={sliderRef} {...settings}>
         <div className='Lookbook-img'>
             <img style={{width:'430px', height:'586px'}} src={LNC1} alt="Image 1" />
           </div>

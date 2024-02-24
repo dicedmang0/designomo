@@ -116,7 +116,7 @@ export default function Product() {
   const { product, variants } = data;
   const {selectedVariant, images} = product;
   const imageNodes = images.edges.map(edge => edge.node);
-  console.log('this is:',selectedVariant);
+  console.log('this is:', data);
   return (
     <div className="product">
       <ProductImage 
@@ -209,13 +209,18 @@ function ProductImage({selectedImage, images}) {
 function ProductMain({selectedVariant, product, variants, currency}) {
   const [isOpen, setIsOpen] = useState(false);
   const [sizeOpen, setSizeOpen] = useState(false);
+  const [isOptionAvailable, setIsOptionAvailable] = useState(selectedVariant ? selectedVariant.availableForSale : true);
   const data = useLoaderData();
-  console.log(data)
+  // console.log("console in product main: ", isOptionAvailable);
   const toggleAccordion = () => {
     setIsOpen(!isOpen);
   };
   const SizeToogle = () => {
     setSizeOpen(!sizeOpen);
+  };
+  const handleOptionSelection = (isAvailable) => {
+    console.log("Selected option availability: ", isAvailable);
+    setIsOptionAvailable(isAvailable);
   };
   const {title, descriptionHtml} = product;
   return (
@@ -362,7 +367,7 @@ function ProductForm({product, selectedVariant, variants}) {
  * }}
  */
 function ProductOptions({option}) {
-  return (
+    return (
     <div className="product-options" key={option.name}>
       <strong>{option.name}</strong>
       <div className="product-options-grid">
@@ -389,6 +394,7 @@ function ProductOptions({option}) {
     </div>
   );
 }
+
 
 /**
  * @param {{

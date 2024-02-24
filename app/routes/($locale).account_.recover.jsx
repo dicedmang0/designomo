@@ -53,7 +53,7 @@ export default function Recover() {
         {action?.resetRequested ? (
           <>
             <h1>Request Sent.</h1>
-            <p>
+            <p style={{maxWidth:'400px'}}>
               If that email address is in our system, you will receive an email
               with instructions about how to reset your password in a few
               minutes.
@@ -64,7 +64,7 @@ export default function Recover() {
         ) : (
           <>
             <h1>Forgot Password.</h1>
-            <p>
+            <p style={{maxWidth:'400px'}}>
               Enter the email address associated with your account to receive a
               link to reset your password.
             </p>

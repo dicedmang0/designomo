@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef, useEffect} from 'react';
 import SC1 from '../Assets/Summer-Capsule.png';
 import SC2 from '../Assets/Summer-Capsule-3.png';
 import SC3 from '../Assets/Summer-Capsule-2.png';
@@ -25,6 +25,35 @@ import TC20 from '../Assets/Technicolor/TC-20.png';
 import Slider from 'react-slick';
 
 function TechnicolorDreams() {
+  const sliderRef = useRef();
+  // Function to handle scroll
+  useEffect(() => {
+    // Function to handle scroll
+    const handleScroll = (e) => {
+      e.preventDefault();
+      if (e.deltaY < 0) {
+        // Scroll up
+        sliderRef.current.slickPrev();
+      } else {
+        // Scroll down
+        sliderRef.current.slickNext();
+      }
+    };
+
+    // Get the slider's DOM node
+    const slider = sliderRef.current;
+    const sliderNode = slider && slider.innerSlider && slider.innerSlider.list;
+
+    if (sliderNode) {
+      sliderNode.addEventListener('wheel', handleScroll, { passive: false });
+    }
+
+    return () => {
+      if (sliderNode) {
+        sliderNode.removeEventListener('wheel', handleScroll);
+      }
+    };
+  }, []);
   const settings = {
     dots: false,
     infinite: true,
@@ -48,7 +77,7 @@ function TechnicolorDreams() {
   return (
     <div className='Summer-Capsule-Container'>
         <div className='Lookbook-Image-Carouesel'>
-        <Slider {...settings}>
+        <Slider ref={sliderRef} {...settings}>
         <div className='Lookbook-img'>
             <img style={{width:'430px', height:'586px'}} src={TC1} alt="Image 1" />
           </div>

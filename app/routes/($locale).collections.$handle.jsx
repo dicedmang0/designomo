@@ -46,7 +46,7 @@ export default function Collection() {
   /** @type {LoaderReturnData} */
   const {collection} = useLoaderData();
   const { currency } = useCurrency();
-  console.log(currency);
+  console.log("this is collection :",collection);
   return (
     <div className="collection">
       <p className="collection-description">{collection.description}</p>

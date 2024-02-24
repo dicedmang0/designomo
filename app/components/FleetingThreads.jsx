@@ -1,7 +1,4 @@
 import React, { useRef,useEffect } from 'react';
-import SC1 from '../Assets/Summer-Capsule.png';
-import SC2 from '../Assets/Summer-Capsule-3.png';
-import SC3 from '../Assets/Summer-Capsule-2.png';
 import FT1 from '../Assets/Fleeting/FT-1.png';
 import FT2 from '../Assets/Fleeting/FT-2.png';
 import FT3 from '../Assets/Fleeting/FT-3.png';
@@ -57,11 +54,11 @@ function FleetingThreads() {
   const settings = {
     dots: false,
     infinite: true,
-    speed: 3000,
+    speed: 1500,
     slidesToShow: 3,
     slidesToScroll: 1,
     autoplay: false,
-    autoplaySpeed: 3000,
+    autoplaySpeed: 1500,
     arrows: false, // Show navigation arrows
     prevArrow: <button className="slick-prev">Previous</button>,
     nextArrow: <button className="slick-next">Next</button>,
@@ -79,64 +76,64 @@ function FleetingThreads() {
         <div className='Lookbook-Image-Carouesel'>
         <Slider ref={sliderRef} {...settings}>
         <div className='Lookbook-img'>
-            <img style={{width:'430px', height:'586px'}} src={FT1} alt="Image 1" />
+            <img style={{objectFit:'cover', objectPosition:'center', height:'586px'}} src={FT1} alt="Image 1" />
           </div>
           <div className='Lookbook-img'>
-            <img style={{width:'430px', height:'586px'}} src={FT2} alt="Image 2" />
+            <img style={{objectFit:'cover', objectPosition:'center', height:'586px'}} src={FT2} alt="Image 2" />
           </div>
           <div className='Lookbook-img'>
-            <img style={{width:'430px', height:'586px'}} src={FT3} alt="Image 3" />
+            <img style={{objectFit:'cover', objectPosition:'center', height:'586px'}} src={FT3} alt="Image 3" />
           </div>
           <div className='Lookbook-img'>
-            <img style={{width:'430px', height:'586px'}} src={FT4} alt="Image 3" />
+            <img style={{objectFit:'cover', objectPosition:'center', height:'586px'}} src={FT4} alt="Image 3" />
           </div>
           <div className='Lookbook-img'>
-            <img style={{width:'430px', height:'586px'}} src={FT5} alt="Image 3" />
+            <img style={{objectFit:'cover', objectPosition:'center', height:'586px'}} src={FT5} alt="Image 3" />
           </div>
           <div className='Lookbook-img'>
-            <img style={{width:'430px', height:'586px'}} src={FT6} alt="Image 3" />
+            <img style={{objectFit:'cover', objectPosition:'center', height:'586px'}} src={FT6} alt="Image 3" />
           </div>
           <div className='Lookbook-img'>
-            <img style={{width:'430px', height:'586px'}} src={FT7} alt="Image 3" />
+            <img style={{objectFit:'cover', objectPosition:'center', height:'586px'}} src={FT7} alt="Image 3" />
           </div>
           <div className='Lookbook-img'>
-            <img style={{width:'430px', height:'586px'}} src={FT8} alt="Image 3" />
+            <img style={{objectFit:'cover', objectPosition:'center', height:'586px'}} src={FT8} alt="Image 3" />
           </div>
           <div className='Lookbook-img'>
-            <img style={{width:'430px', height:'586px'}} src={FT9} alt="Image 3" />
+            <img style={{objectFit:'cover', objectPosition:'center', height:'586px'}} src={FT9} alt="Image 3" />
           </div>
           <div className='Lookbook-img'>
-            <img style={{width:'430px', height:'586px'}} src={FT10} alt="Image 3" />
+            <img style={{objectFit:'cover', objectPosition:'center', height:'586px'}} src={FT10} alt="Image 3" />
           </div>
           <div className='Lookbook-img'>
-            <img style={{width:'430px', height:'586px'}} src={FT11} alt="Image 3" />
+            <img style={{objectFit:'cover', objectPosition:'center', height:'586px'}} src={FT11} alt="Image 3" />
           </div>
           <div className='Lookbook-img'>
-            <img style={{width:'430px', height:'586px'}} src={FT12} alt="Image 3" />
+            <img style={{objectFit:'cover', objectPosition:'center', height:'586px'}} src={FT12} alt="Image 3" />
           </div>
           <div className='Lookbook-img'>
-            <img style={{width:'430px', height:'586px'}} src={FT13} alt="Image 3" />
+            <img style={{objectFit:'cover', objectPosition:'center', height:'586px'}} src={FT13} alt="Image 3" />
           </div>
           <div className='Lookbook-img'>
-            <img style={{width:'430px', height:'586px'}} src={FT14} alt="Image 3" />
+            <img style={{objectFit:'cover', objectPosition:'center', height:'586px'}} src={FT14} alt="Image 3" />
           </div>
           <div className='Lookbook-img'>
-            <img style={{width:'430px', height:'586px'}} src={FT15} alt="Image 3" />
+            <img style={{objectFit:'cover', objectPosition:'center', height:'586px'}} src={FT15} alt="Image 3" />
           </div>
           <div className='Lookbook-img'>
-            <img style={{width:'430px', height:'586px'}} src={FT16} alt="Image 3" />
+            <img style={{objectFit:'cover', objectPosition:'center', height:'586px'}} src={FT16} alt="Image 3" />
           </div>
           <div className='Lookbook-img'>
-            <img style={{width:'430px', height:'586px'}} src={FT17} alt="Image 3" />
+            <img style={{objectFit:'cover', objectPosition:'center', height:'586px'}} src={FT17} alt="Image 3" />
           </div>
           <div className='Lookbook-img'>
-            <img style={{width:'430px', height:'586px'}} src={FT18} alt="Image 3" />
+            <img style={{objectFit:'cover', objectPosition:'center', height:'586px'}} src={FT18} alt="Image 3" />
           </div>
           <div className='Lookbook-img'>
-            <img style={{width:'430px', height:'586px'}} src={FT19} alt="Image 3" />
+            <img style={{objectFit:'cover', objectPosition:'center', height:'586px'}} src={FT19} alt="Image 3" />
           </div>
           <div className='Lookbook-img'>
-            <img style={{width:'430px', height:'586px'}} src={FT20} alt="Image 3" />
+            <img style={{objectFit:'cover', objectPosition:'center', height:'586px'}} src={FT20} alt="Image 3" />
           </div>
         </Slider>
         </div>

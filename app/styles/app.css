@@ -19,7 +19,6 @@ LookBook Detail
   padding: 150px 34px;
 }
 .Lookbook-img img{
-  max-width: 430px;
   max-height: 586px;
 }
 .Lookbook-Title h1{
@@ -29,6 +28,7 @@ LookBook Detail
 .slick-slide{
   max-width: 550px;
   float: inline-start;
+  width: unset !important;
 }
 .Currency-Button{
   position: absolute;
@@ -228,6 +228,8 @@ aside li {
   align-items: center;
   font-weight: bold;
   margin-top: 100px;
+  text-transform: uppercase;
+  font-size: 13px;
 }
 
 .header-menu-desktop {
