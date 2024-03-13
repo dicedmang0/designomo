@@ -900,6 +900,15 @@ text-transform: uppercase;
   font-size: 14px;
   letter-spacing: -0.8px;
 }
+.Return-Content h2{
+  margin-bottom: 0px;
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 83.49%;
+  letter-spacing: -1.575px;
+  text-transform: uppercase;
+}
 /*
 * --------------------------------------------------
 * routes/About-us.jsx
