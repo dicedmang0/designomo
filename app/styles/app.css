@@ -1442,5 +1442,12 @@ max-width: 461px;
   .collection button{
     padding: 10px 40px;
   }
+  .LP-Container{
+    height: auto;
+    display: flex;
+  }
+  .Image-LP{
+    height: auto;
+  }
 }
 
