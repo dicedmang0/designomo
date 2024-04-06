@@ -72,7 +72,6 @@ function CartLineItem({layout, line, currency}) {
   const {id, merchandise} = line;
   const {product, title, image, selectedOptions} = merchandise;
   const lineItemUrl = useVariantUrl(product.handle, selectedOptions);
-  console.log('Currency in CartLine:',currency);
 
   return (
     <li key={id} className="cart-line">

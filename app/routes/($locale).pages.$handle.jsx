@@ -57,7 +57,6 @@ export default function Page() {
   /** @type {LoaderReturnData} */
   const {page} = useLoaderData();
   const divRef = useRef(null);
-  console.log(page);
   const isBrowser = typeof window !== 'undefined';
   const [windowWidth, setWindowWidth] = useState(isBrowser ? window.innerWidth : 0);
   const [isDragging, setIsDragging] = useState(false);

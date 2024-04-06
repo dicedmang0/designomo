@@ -140,7 +140,6 @@ export function HeaderMenu({menu, primaryDomainUrl, viewport}) {
           ...activeLinkStyle,
           color: isSaleItem ? 'red' : 'black', // Red color for SALE, black for others
         };
-    console.log(menu)
     return (
       <div key={item.id}>
             {hasSubmenu ? (
