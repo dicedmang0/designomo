@@ -20,7 +20,7 @@ function Shippingpolicy() {
         </h2>
         <br/>
         <p>
-            Orders placed after 5:00 PM (+7 GMT) will be processed on the next
+            Orders placed after 3:00 PM (+7 GMT) will be processed on the next
             following business day.
         </p>
         <br/>
