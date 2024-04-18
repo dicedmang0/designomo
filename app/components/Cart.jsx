@@ -34,7 +34,7 @@ function CartDetails({layout, cart, currency}) {
       {cartHasItems && (
         <CartSummary cost={cart.cost} currency={currency} layout={layout}>
           <CartDiscounts discountCodes={cart.discountCodes} />
-          <p style={{fontFamily:'Arial', textTransform:'uppercase', fontSize:'10px', textAlign:'justify'}}>SHIPPING NOTICE: Due to Eid Holiday, orders placed between 6th-14th April 2024 will be processed for delivery on 15th April 2024.</p>
+          <p style={{fontFamily:'Arial', textTransform:'uppercase', fontSize:'10px', textAlign:'justify'}}>Shipments will be processed Monday-Friday. Orders placed after 3.00 PM (+7 GMT) will be processed in the next following business days.</p>
           <CartCheckoutActions checkoutUrl={cart.checkoutUrl} />
         </CartSummary>
       )}
@@ -303,10 +303,10 @@ export function CartEmpty({hidden = false, layout = 'aside'}) {
       </p>
       <br />
       <Link
-        to="/collections"
+        to="/collections/all"
         onClick={() => {
           if (layout === 'aside') {
-            window.location.href = '/collections';
+            window.location.href = '/collections/all';
           }
         }}
       >
