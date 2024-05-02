@@ -121,7 +121,9 @@ export default function Product() {
     <div className="product">
       <ProductImage 
       selectedImage={selectedVariant.image} 
-      images={imageNodes} />
+      images={imageNodes}
+      selectedVariant={selectedVariant}
+      />
       <ProductMain
         selectedVariant={selectedVariant}
         product={product}
@@ -137,9 +139,9 @@ export default function Product() {
  * @param {{images: ProductVariantFragment['image']}}
  * 
  */
-function ProductImage({selectedImage, images}) {
+function ProductImage({ selectedImage, images, selectedVariant }) {
   const sliderRef = useRef(null);
-  // const [selectedImage, setSelectedImage] = useState(images[0]);
+
   useEffect(() => {
     const slider = sliderRef.current;
     if (slider) {
@@ -152,13 +154,11 @@ function ProductImage({selectedImage, images}) {
         }
       };
 
-      // Add event listener
       const sliderNode = slider.innerSlider && slider.innerSlider.list;
       if (sliderNode) {
         sliderNode.addEventListener('wheel', handleWheel, { passive: false });
       }
 
-      // Clean up
       return () => {
         if (sliderNode) {
           sliderNode.removeEventListener('wheel', handleWheel);
@@ -166,24 +166,31 @@ function ProductImage({selectedImage, images}) {
       };
     }
   }, []);
+
   const settings = {
-    dots: true, // Show dot indicators
+    dots: true,
     infinite: true,
     speed: 2500,
     slidesToShow: 1,
     slidesToScroll: 1,
     adaptiveHeight: false,
   };
-  const allImages = [selectedImage, ...images.filter(img => img.id !== selectedImage.id)];
 
-  // console.log('this is all imager',allImages)
-  if (!images) {
-    return <div className="product-image" />;
+  // Safely checking for 'Color' option and ensuring 'altText' is not null before calling 'includes'
+  const variantColor = selectedVariant.selectedOptions.find(option => option.name === 'Color')?.value;
+  const filteredImages = images.filter(img => img.altText && img.altText.includes(variantColor) && img.id !== selectedImage.id);
+  console.log("this is color " +variantColor);
+  // Ensure selectedImage is always shown first if available
+  const imageSet = [selectedImage, ...filteredImages].filter(Boolean);  // Also filters out any null or undefined images
+
+  if (!imageSet.length) {
+    return <div className="product-image">No images available</div>;
   }
+
   return (
     <div className="product-image-slider">
       <Slider ref={sliderRef} {...settings}>
-        {allImages.map((image, index) => (
+        {imageSet.map((image, index) => (
           <div key={index}>
             <img
               src={image.url || image.originalSrc}
@@ -195,6 +202,8 @@ function ProductImage({selectedImage, images}) {
     </div>
   );
 }
+
+
 
 
 /**
@@ -528,7 +537,7 @@ const PRODUCT_FRAGMENT = `#graphql
     handle
     descriptionHtml
     description
-    images(first: 5) {
+    images(first: 10) {
       edges {
         node {
           id
