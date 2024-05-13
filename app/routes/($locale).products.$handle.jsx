@@ -116,7 +116,6 @@ export default function Product() {
   const { product, variants } = data;
   const {selectedVariant, images} = product;
   const imageNodes = images.edges.map(edge => edge.node);
-  console.log('this is:', data);
   return (
     <div className="product">
       <ProductImage 
@@ -179,7 +178,6 @@ function ProductImage({ selectedImage, images, selectedVariant }) {
   // Safely checking for 'Color' option and ensuring 'altText' is not null before calling 'includes'
   const variantColor = selectedVariant.selectedOptions.find(option => option.name === 'Color')?.value;
   const filteredImages = images.filter(img => img.altText && img.altText.includes(variantColor) && img.id !== selectedImage.id);
-  console.log("this is color " +variantColor);
   // Ensure selectedImage is always shown first if available
   const imageSet = [selectedImage, ...filteredImages].filter(Boolean);  // Also filters out any null or undefined images
 
@@ -220,7 +218,6 @@ function ProductMain({selectedVariant, product, variants, currency}) {
   const [sizeOpen, setSizeOpen] = useState(false);
   const [isOptionAvailable, setIsOptionAvailable] = useState(selectedVariant ? selectedVariant.availableForSale : true);
   const data = useLoaderData();
-  // console.log("console in product main: ", isOptionAvailable);
   const toggleAccordion = () => {
     setIsOpen(!isOpen);
   };
@@ -228,7 +225,6 @@ function ProductMain({selectedVariant, product, variants, currency}) {
     setSizeOpen(!sizeOpen);
   };
   const handleOptionSelection = (isAvailable) => {
-    console.log("Selected option availability: ", isAvailable);
     setIsOptionAvailable(isAvailable);
   };
   const {title, descriptionHtml} = product;
@@ -307,7 +303,6 @@ function ProductPrice({selectedVariant, currency}) {
 
   const isOnSale = convertedCompareAtPrice && convertedPrice && convertedCompareAtPrice > convertedPrice;
 
-  console.log(selectedVariant);
   return (
     <div className="product-price">
       {isOnSale ? (
@@ -537,7 +532,7 @@ const PRODUCT_FRAGMENT = `#graphql
     handle
     descriptionHtml
     description
-    images(first: 10) {
+    images(first: 20) {
       edges {
         node {
           id
