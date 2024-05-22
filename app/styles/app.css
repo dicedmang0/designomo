@@ -721,7 +721,10 @@ input[type=search]{
 }
 
 .recommended-product img {
-  height: auto;
+  width: 100%;
+  max-height: 260px;
+  height: 100%;
+  object-fit: cover;
 }
 
 @keyframes Loader {
@@ -1071,7 +1074,7 @@ max-width: 461px;
   
 }
 .checkout-btn a{
-  color: white;
+  color: black;
 }
 .product-price{
   font-style: italic;

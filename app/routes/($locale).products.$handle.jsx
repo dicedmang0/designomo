@@ -70,16 +70,27 @@ export async function loader({params, request, context}) {
     }
   }
 
-  // In order to show which variants are available in the UI, we need to query
-  // all of them. But there might be a *lot*, so instead separate the variants
-  // into it's own separate query that is deferred. So there's a brief moment
-  // where variant options might show as available when they're not, but after
-  // this deffered query resolves, the UI will update.
+  // Fetch tags of the currently viewed product
+  const tagsData = await storefront.query(GET_PRODUCT_TAGS_QUERY, {
+    variables: {productId: product.id},
+  });
+
+  const tags = tagsData?.product?.tags || [];
+  const tagsQuery = tags.length > 0 ? tags.map(tag => `tag:${tag}`).join(' OR ') : '';
+
+
+  // Fetch related products using the tags query
+  const relatedProducts = tagsQuery ? await storefront.query(GET_RELATED_PRODUCTS_QUERY, {
+    variables: {query: tagsQuery, first: 20},
+  }) : { products: { edges: [] } };
+
+
+  
+
   const variants = storefront.query(VARIANTS_QUERY, {
     variables: {handle},
   });
-
-  return defer({product, variants, recommendedProducts});
+  return defer({product, variants, relatedProducts});
 }
 
 /**
@@ -113,7 +124,7 @@ export default function Product() {
   if (!data) {
     return <div>Loading data or data is not available...</div>;
   }
-  const { product, variants } = data;
+  const { product, variants, relatedProducts} = data;
   const {selectedVariant, images} = product;
   const imageNodes = images.edges.map(edge => edge.node);
   return (
@@ -129,7 +140,7 @@ export default function Product() {
         variants={variants}
         currency={currency}
       />
-        <RecommendedProducts products={data.recommendedProducts} currency={currency} />
+        <RelatedProducts products={relatedProducts.products} currency={currency} />
     </div>
   );
 }
@@ -200,8 +211,6 @@ function ProductImage({ selectedImage, images, selectedVariant }) {
     </div>
   );
 }
-
-
 
 
 /**
@@ -488,6 +497,81 @@ function RecommendedProducts({products, currency}) {
  );
 }
 
+function shuffleArray(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+function getRandomSubset(array, subsetSize) {
+  const shuffledArray = array.slice();
+  for (let i = shuffledArray.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+  }
+  return shuffledArray.slice(0, subsetSize);
+}
+
+function RelatedProducts({products, currency}) {
+  const formatCurrency = (amount, currency) => {
+    if (currency === 'USD') {
+      return amount.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+    } else {
+      // For IDR, manually add the 'IDR' code and format with dot separators
+      return `IDR ${amount.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.')}`;
+    }
+  };
+ 
+  const convertPrice = (price) => {
+    const exchangeRate = currency === 'USD' ? 0.000068 : 1; // Replace with actual exchange rate
+    return price * exchangeRate;
+  };
+
+  return (
+    <div className="recommended-products">
+      <h2>Related Products</h2>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Await resolve={products}>
+          {({edges}) => {
+            if (!edges || edges.length === 0) {
+              return <div>No related products found.</div>;
+            }
+            const randomProducts = getRandomSubset(edges, 4);
+            return (
+              <div className="recommended-products-grid">
+                {randomProducts.map(({ node: product }) => {
+                  const convertedPrice = formatCurrency(
+                    convertPrice(product.variants.edges[0].node.price.amount),
+                    currency
+                  );
+                  return (
+                    <Link
+                      key={product.id}
+                      className="recommended-product"
+                      to={`/products/${product.handle}`}
+                    >
+                      <Image
+                        src={product.images.edges[0]?.node.src}
+                        alt={product.title}
+                        sizes="(min-width: 45em) 20vw, 50vw"
+                      />
+                      <h4 style={{textTransform:'uppercase'}}>{product.title}</h4>
+                      <small>{convertedPrice}</small>
+                    </Link>
+                  );
+                })}
+              </div>
+            );
+          }}
+        </Await>
+      </Suspense>
+      <br />
+    </div>
+  );
+}
+
+
 const PRODUCT_VARIANT_FRAGMENT = `#graphql
   fragment ProductVariant on ProductVariant {
     availableForSale
@@ -626,6 +710,46 @@ const RECOMMENDED_PRODUCTS_QUERY = `#graphql
     products(first: 4, sortKey: UPDATED_AT, reverse: true) {
       nodes {
         ...RecommendedProduct
+      }
+    }
+  }
+`;
+const GET_PRODUCT_TAGS_QUERY = `#graphql
+  query GetProductTags($productId: ID!) {
+    product(id: $productId) {
+      id
+      tags
+    }
+  }
+`;
+
+const GET_RELATED_PRODUCTS_QUERY = `#graphql
+  query GetRelatedProducts($query: String!, $first: Int!) {
+    products(first: $first, query: $query, sortKey: BEST_SELLING, reverse: true) {
+      edges {
+        node {
+          id
+          title
+          handle
+          descriptionHtml
+          images(first: 1) {
+            edges {
+              node {
+                src
+              }
+            }
+          }
+          variants(first: 1) {
+            edges {
+              node {
+                price {
+                  amount
+                  currencyCode
+                }
+              }
+            }
+          }
+        }
       }
     }
   }
