@@ -2,7 +2,7 @@ import {defer} from '@shopify/remix-oxygen';
 import {Await, useLoaderData, Link} from '@remix-run/react';
 import {Suspense} from 'react';
 import {Image, Money} from '@shopify/hydrogen';
-import Image1 from '../Assets/Home/new-main.jpg';
+import Image1 from '../Assets/Home/homepage.jpg';
 import Image2 from '../Assets/Home/Homepage-collage-01.jpg';
 import Image3 from '../Assets/Home/Homepage-collage-02.jpg';
 import Image4 from '../Assets/Home/Homepage-collage-03.jpg';
