@@ -397,7 +397,7 @@ aside li {
   padding-top: 0.75rem;
   position: absolute;
   width: calc(var(--aside-width) - 40px);
-  padding-bottom: 0.75rem;
+  padding-bottom: 3.75rem;
 }
 
 .cart-line-quantiy {
@@ -1215,6 +1215,7 @@ max-width: 461px;
     height: 50px;
 
   }
+  
   .About-section-2{
     margin-top: 0px;
   }
