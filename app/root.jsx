@@ -137,6 +137,7 @@ export default function App() {
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <title>Design by Omo</title>
         <meta name="description" content="Our commitment extends to comfort and sustainability. From fabric selection to the final stitch, every OMO pieces are designed and produced in Indonesia." />
+        <meta name="google-site-verification" content="zgYZYh-SxEPwlAD-GxUCHuVuCykKTOyuOxkG6q6eirc" />
         <SEOHead seo={seoConfig} />
         <Meta />
         <Links />
